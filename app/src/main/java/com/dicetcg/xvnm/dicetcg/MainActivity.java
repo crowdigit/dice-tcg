@@ -3,6 +3,8 @@ package com.dicetcg.xvnm.dicetcg;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private GLView mGLView;
@@ -13,8 +15,14 @@ public class MainActivity extends AppCompatActivity {
         mGLView = new GLView(this);
         setContentView(mGLView);
 
-        Renderable test = new TestShape(0.0f, 0.0f, 0.0f, 100.0f, 100.0f);
-        getRenderer().registerRenderable(test);
+        if (android.os.Build.VERSION.SDK_INT >= 11)
+            mGLView.setPreserveEGLContextOnPause(true);
+
+        Renderable card = new TestShape("asdf", 100, 0.0f);
+        TestShape carbB = new TestShape("aszxczxv", 200, 200.0f);
+
+        getRenderer().registerRenderable(card);
+        // getRenderer().registerRenderable(carbB);
     }
 
     public GLRenderer getRenderer() {

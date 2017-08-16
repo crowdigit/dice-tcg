@@ -11,12 +11,22 @@ import java.nio.FloatBuffer;
 
 public abstract class Renderable {
 
-    abstract String getTextureID();
-    abstract float getX();
-    abstract float getY();
-    abstract float getZ();
-    abstract float getW();
-    abstract float getH();
+    abstract public int getTextureID();
+    abstract public float getX();
+    abstract public float getY();
+    abstract public float getZ();
+    abstract public float getW();
+    abstract public float getH();
+
+    private int mTexID;
+
+    public int getTexture() {
+        return mTexID;
+    }
+
+    public void setTexture(int tex) {
+        mTexID = tex;
+    }
 
     void prerender(GLRenderer renderer) {
     }

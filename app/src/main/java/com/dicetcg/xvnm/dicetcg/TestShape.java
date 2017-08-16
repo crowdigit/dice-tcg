@@ -1,54 +1,52 @@
 package com.dicetcg.xvnm.dicetcg;
 
-/**
- * Created by xvnm on 8/16/17.
- */
+import com.dicetcg.xvnm.dicetcg.Renderable;
 
 public class TestShape extends Renderable {
 
-    private float mX, mY, mZ, mW, mH;
+    private String mName;
+    private int mAttc;
+    private float mX;
+    private float mW;
+    private float mH;
 
-    TestShape(float x, float y, float z, float w, float h) {
+    TestShape(String name, int attc, float x) {
+        mName = name;
+        mAttc = attc;
         mX = x;
-        mY = y;
-        mZ = z;
-        mW = w;
-        mH = h;
+        mW = 1.0f;
     }
 
-    @Override
-    public String getTextureID() {
-        return "";
+    public int getTextureID() {
+        return 0;
     }
 
-    @Override
     public float getX() {
         return mX;
     }
 
-    @Override
     public float getY() {
-        return mY;
+        return 0;
     }
 
-    @Override
     public float getZ() {
-        return mZ;
+        return 0;
     }
 
-    @Override
     public float getW() {
         return mW;
     }
 
-    @Override
     public float getH() {
         return mH;
     }
 
     @Override
-    public void prerender(GLRenderer renderer) {
-        mX += 0.3;
+    void prerender(GLRenderer renderer) {
+        float w = renderer.getScreenWidth();
+        float h = renderer.getScreenHeight();
+        float ratio = w/h;
+        mW = ratio * 300;
+        mH = ratio * 400;
     }
-
 }

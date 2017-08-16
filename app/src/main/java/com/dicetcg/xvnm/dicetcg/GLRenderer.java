@@ -1,6 +1,9 @@
 package com.dicetcg.xvnm.dicetcg;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -10,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,15 +39,14 @@ public class GLRenderer implements GLSurfaceView.Renderer {
             0.0f, 0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 0.0f, 1.0f,
     };
-    private InputStream vertInput;
-    private InputStream fragInput;
+    private ArrayList<Integer> mTextureIDs;
+    private Resources mResources;
+    private String mPackageName;
 
     public GLRenderer(Context context) {
-        vertInput = context.getResources()
-                .openRawResource(R.raw.vert);
-        fragInput = context.getResources()
-                .openRawResource(R.raw.frag);
+        mResources = context.getResources();
         mRenderables = new LinkedList<Renderable>();
+        mPackageName = context.getPackageName();
     }
 
     @Override
@@ -60,6 +63,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        InputStream vertInput = mResources.openRawResource(R.raw.vert);
+        InputStream fragInput = mResources.openRawResource(R.raw.frag);
         mProgram = linkProgram(
                 loadShader(GLES20.GL_VERTEX_SHADER, vertInput),
                 loadShader(GLES20.GL_FRAGMENT_SHADER, fragInput)
@@ -68,6 +73,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         mVertexAttrib = GLES20.glGetAttribLocation(mProgram, "Vertex");
         mMatLocation = GLES20.glGetUniformLocation(mProgram, "M");
         mVBO = createVertexArray();
+
+        // int testTex = loadTexture();
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
@@ -171,12 +178,23 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         mRenderables.add(renderable);
     }
 
-    public float[] getOrtho() {
-        return mOrtho;
-    }
+    public float[] getOrtho() { return mOrtho; }
 
     public int getMatrixLocation() {
         return mMatLocation;
     }
+
+    /*
+    private int loadTexture(String textureName) {
+        int resId = mResources.getIdentifier(textureName, "drawable", mPackageName);
+        if (resId == 0) {
+            Log.e("texture", "failed to open texture \"" + textureName + "\"");
+            return 0;
+        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        // Bitmap bitmap = BitmapFactory.decodeResource(mResources, resId,)
+    }
+    */
 
 }
