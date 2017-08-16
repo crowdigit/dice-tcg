@@ -33,6 +33,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     private int mVertexAttrib;
     private LinkedList<Renderable> mRenderables;
     private int mMatLocation;
+    private int mColorLocation;
     private float[]mOrtho = new float[] {
             1.0f, 0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f, 0.0f,
@@ -72,6 +73,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         GLES20.glUseProgram(mProgram);
         mVertexAttrib = GLES20.glGetAttribLocation(mProgram, "Vertex");
         mMatLocation = GLES20.glGetUniformLocation(mProgram, "M");
+        mColorLocation = GLES20.glGetUniformLocation(mProgram, "color");
         mVBO = createVertexArray();
 
         // int testTex = loadTexture();
@@ -182,6 +184,10 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     public int getMatrixLocation() {
         return mMatLocation;
+    }
+
+    public int getColorLocation() {
+        return mColorLocation;
     }
 
     /*
