@@ -2,7 +2,7 @@ package com.dicetcg.xvnm.dicetcg;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.AttributeSet;
+
 
 /**
  * Created by xvnm on 8/15/17.
@@ -10,12 +10,22 @@ import android.util.AttributeSet;
 
 public class GLView extends GLSurfaceView {
 
+    private GLRenderer mGLRenderer;
+
     public GLView(Context context) {
         super(context);
+        init();
     }
 
-    public GLView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    private void init() {
+        setEGLContextClientVersion(2);
+        mGLRenderer = new GLRenderer(getContext());
+        setRenderer(mGLRenderer);
+        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+    }
+
+    public GLRenderer getRenderer() {
+        return mGLRenderer;
     }
 
 }

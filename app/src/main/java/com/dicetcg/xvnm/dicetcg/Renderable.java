@@ -1,63 +1,34 @@
 package com.dicetcg.xvnm.dicetcg;
 
+import android.opengl.GLES20;
+import android.opengl.Matrix;
+
+import java.nio.FloatBuffer;
+
 /**
  * Created by xvnm on 8/15/17.
  */
 
-public class Renderable {
+public abstract class Renderable {
 
-    Renderable(String textureID, int x, int y, int w, int h) {
-        mTextureID = textureID;
-        mX = x;
-        mY = y;
-        mW = w;
-        mH = h;
+    abstract String getTextureID();
+    abstract float getX();
+    abstract float getY();
+    abstract float getZ();
+    abstract float getW();
+    abstract float getH();
+
+    void prerender(GLRenderer renderer) {
     }
 
-    void render() {
-        // TODO
+    final void render(GLRenderer renderer) {
+        float[]mat = new float[16];
+        Matrix.setIdentityM(mat, 0);
+        Matrix.translateM(mat, 0, getX(), getY(), getZ());
+        Matrix.scaleM(mat, 0, getW(), getH(), 1.0f);
+        Matrix.multiplyMM(mat, 0, renderer.getOrtho(), 0, mat, 0);
+        GLES20.glUniformMatrix4fv(renderer.getMatrixLocation(), 1, false, FloatBuffer.wrap(mat));
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
     }
-
-    public String getTextureID() {
-        return mTextureID;
-    }
-
-    public int getX() {
-        return mX;
-    }
-
-    public int getY() {
-        return mY;
-    }
-
-    public int getW() {
-        return mW;
-    }
-
-    public int getH() {
-        return mH;
-    }
-
-    public void setX(int x) {
-        mX = x;
-    }
-
-    public void setY(int y) {
-        mY = y;
-    }
-
-    public void setW(int w) {
-        mW = w;
-    }
-
-    public void setH(int h) {
-        mH = h;
-    }
-
-    private String mTextureID;
-    private int mX;
-    private int mY;
-    private int mW;
-    private int mH;
 
 }
