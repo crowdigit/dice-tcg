@@ -1,18 +1,11 @@
 package com.dicetcg.xvnm.dicetcg;
 
-import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
     private GLView mGLView;
-    private GLRenderer mGLRenderer;
 
     int PlayerHP = 0;
 
@@ -34,52 +27,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGLView = new GLView(this);
-        mGLRenderer = new GLRenderer();
-        mGLView.setRenderer(mGLRenderer);
-        mGLView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         setContentView(mGLView);
-        Turn();
+
+        Renderable test = new TestShape(0.0f, 0.0f, 0.0f, 100.0f, 100.0f);
+        getRenderer().registerRenderable(test);
     }
 
-    public void runDice(View v){
-        diceNum = (int)Math.random() * 6 + 1;
-        switch (diceNum){
-            case 1 :
-                break;
-            case 2 :
-                break;
-            case 3 :
-                break;
-            case 4 :
-                break;
-            case 5 :
-                break;
-            case 6 :
-                break;
-        }
-    }
-
-    public void Turn(){
-        if (playerTimeFlag != 0) {
-
-            if (gameOverFlag != 0){
-                Turn();
-            }
-        }
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
-        }
-        else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-
-        }
-        else if (event.getAction() == MotionEvent.ACTION_UP) {
-
-        }
-        return false;
+    public GLRenderer getRenderer() {
+        return mGLView.getRenderer();
     }
 
 }
