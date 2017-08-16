@@ -34,4 +34,19 @@ public class CardBlank extends Renderable{
     public float getH() {
         return 0;
     }
+
+    @Override
+    public float getR() {
+        return 0;
+    }
+
+    @Override
+    public float getG() {
+        return 0;
+    }
+
+    @Override
+    public float getB() {
+        return 0;
+    }
 }

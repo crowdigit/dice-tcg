@@ -1,52 +1,47 @@
 package com.dicetcg.xvnm.dicetcg;
 
-import com.dicetcg.xvnm.dicetcg.Renderable;
+import java.util.Random;
 
 public class TestShape extends Renderable {
 
-    private String mName;
-    private int mAttc;
-    private float mX;
-    private float mW;
-    private float mH;
+    private float mR, mG, mB;
+    private float mW, mH;
 
-    TestShape(String name, int attc, float x) {
-        mName = name;
-        mAttc = attc;
-        mX = x;
+    TestShape() {
+        mR = 0.0f;
+        mG = 0.0f;
+        mB = 0.0f;
         mW = 1.0f;
+        mH = 1.0f;
     }
 
     public int getTextureID() {
         return 0;
     }
 
-    public float getX() {
-        return mX;
-    }
+    public float getX() { return 0.0f; }
 
-    public float getY() {
-        return 0;
-    }
+    public float getY() { return 0.0f; }
 
-    public float getZ() {
-        return 0;
-    }
+    public float getZ() { return 0.0f; }
 
-    public float getW() {
-        return mW;
-    }
+    public float getW() { return mW; }
 
-    public float getH() {
-        return mH;
-    }
+    public float getH() { return mH; }
+
+    public float getR() { return mR; }
+
+    public float getG() { return mG; }
+
+    public float getB() { return mB; }
 
     @Override
-    void prerender(GLRenderer renderer) {
-        float w = renderer.getScreenWidth();
-        float h = renderer.getScreenHeight();
-        float ratio = w/h;
-        mW = ratio * 300;
-        mH = ratio * 400;
+    public void prerender(GLRenderer renderer) {
+        Random random = new Random();
+        mR = random.nextFloat();
+        mG = random.nextFloat();
+        mB = random.nextFloat();
+        mW = renderer.getScreenWidth();
+        mH = renderer.getScreenHeight();
     }
 }

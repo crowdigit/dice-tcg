@@ -32,21 +32,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mGLView = new GLView(this);
         setContentView(mGLView);
-        //Renderable test = new TestShape(0.0f, 0.0f, 0.0f, 100.0f, 100.0f);
-        //getRenderer().registerRenderable(test);
+        Renderable test = new TestShape();
+        getRenderer().registerRenderable(test);
 
         cardDB = new CardDBHandler(this, "cardDB.db", null, 1);
-        AddCard();
+        AddCard();                                              //나중에 DB 불러왔을 때 DB가 비었다면 실행하는 방향으로
 
 
         if (android.os.Build.VERSION.SDK_INT >= 11)
             mGLView.setPreserveEGLContextOnPause(true);
 
-        Renderable card = new TestShape("asdf", 100, 0.0f);
-        TestShape carbB = new TestShape("aszxczxv", 200, 200.0f);
+        //Renderable card = new TestShape("asdf", 100, 0.0f);
+        //TestShape carbB = new TestShape("aszxczxv", 200, 200.0f);
 
-        getRenderer().registerRenderable(card);
-        // getRenderer().registerRenderable(carbB);
+        //getRenderer().registerRenderable(card);
+        //getRenderer().registerRenderable(carbB);
+
+        cardDB = new CardDBHandler(this, "cardDB.db", null, 1);
+        AddCard();
     }
 
     public GLRenderer getRenderer() {
@@ -63,32 +66,27 @@ public class MainActivity extends AppCompatActivity {
         String name;
         String insert_data;
 
-        SQLiteDatabase db;
+        SQLiteDatabase db = cardDB.getWritableDatabase();;
 
         name = "암무트"; HP = 2100; DiceTop = 2000; DiceBottom = 1700; DiceMax = 5;
         insert_data = "insert into cardDB values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         System.out.print(insert_data);
-        db = cardDB.getWritableDatabase();
         db.execSQL(insert_data);
 
         name = "빅풋"; HP = 2000; DiceTop = 2300; DiceBottom = 1400; DiceMax = 3;
         insert_data = "insert into cardDB values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
-        db = cardDB.getWritableDatabase();
         db.execSQL(insert_data);
 
         name = "피빛의기사"; HP = 2300; DiceTop = 2000; DiceBottom = 1500; DiceMax = 3;
         insert_data = "insert into cardDB values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
-        db = cardDB.getWritableDatabase();
         db.execSQL(insert_data);
 
         name = "본건"; HP = 2100; DiceTop = 2100; DiceBottom = 1000; DiceMax = 2;
         insert_data = "insert into cardDB values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
-        db = cardDB.getWritableDatabase();
         db.execSQL(insert_data);
 
         name = "청이"; HP = 2400; DiceTop = 2300; DiceBottom = 1900; DiceMax = 4;
         insert_data = "insert into cardDB values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
-        db = cardDB.getWritableDatabase();
         db.execSQL(insert_data);
 
         db.close();
