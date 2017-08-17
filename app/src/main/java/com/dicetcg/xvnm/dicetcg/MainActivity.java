@@ -33,6 +33,16 @@ public class MainActivity extends AppCompatActivity {
         mGLView = new GLView(this);
         setContentView(mGLView);
 
+        Renderable test1 = new TestShape2();
+        test1.renderTexture(true);
+        test1.setTexture(0);
+
+        Renderable test2 = new TestShape();
+        test2.renderTexture(false);
+
+        getRenderer().registerRenderable(test1);
+        getRenderer().registerRenderable(test2);
+
         myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
         AddCard();           //나중에 DB 불러왔을 때 DB가 비었다면 그 때만 실행하는 방향으로
 

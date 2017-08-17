@@ -7,33 +7,47 @@ public class TestShape extends Renderable {
     private float mR, mG, mB;
     private float mW, mH;
 
-    TestShape() {
-        mR = 0.0f;
-        mG = 0.0f;
-        mB = 0.0f;
-        mW = 1.0f;
-        mH = 1.0f;
-    }
-
     public int getTextureID() {
         return 0;
     }
 
-    public float getX() { return 0.0f; }
+    public float getX() {
+        return 0;
+    }
 
-    public float getY() { return 0.0f; }
+    public float getY() {
+        return 0;
+    }
 
-    public float getZ() { return 0.0f; }
+    public float getZ() {
+        return 0;
+    }
 
-    public float getW() { return mW; }
+    public float getW() {
+        return mW;
+    }
 
-    public float getH() { return mH; }
+    public float getH() {
+        return mH;
+    }
 
-    public float getR() { return mR; }
+    public float getR() {
+        return mR;
+    }
 
-    public float getG() { return mG; }
+    public float getG() {
+        return mG;
+    }
 
-    public float getB() { return mB; }
+    public float getB() {
+        return mB;
+    }
+
+    @Override
+    public void init(GLRenderer renderer) {
+        mW = renderer.getScreenWidth();
+        mH = renderer.getScreenHeight();
+    }
 
     @Override
     public void prerender(GLRenderer renderer) {
@@ -43,5 +57,7 @@ public class TestShape extends Renderable {
         mB = random.nextFloat();
         mW = renderer.getScreenWidth();
         mH = renderer.getScreenHeight(); */
+
     }
+
 }

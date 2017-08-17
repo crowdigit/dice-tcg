@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
 
@@ -26,28 +27,30 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class GLRenderer implements GLSurfaceView.Renderer {
 
-    private int mProgram;
-    private int mScreenWidth;
-    private int mScreenHeight;
+    private int mScreenWidth, mScreenHeight;
     private int mVBO;
-    private int mVertexAttrib;
     private LinkedList<Renderable> mRenderables;
-    private int mMatLocation;
-    private int mColorLocation;
+    private LinkedList<Renderable> mRenderablesQueue;
     private float[]mOrtho = new float[] {
             1.0f, 0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f, 0.0f,
             0.0f, 0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 0.0f, 1.0f,
     };
+    private LinkedList<String> mTextureNames;
     private ArrayList<Integer> mTextureIDs;
+    private ArrayList<Shader> mPrograms;
     private Resources mResources;
     private String mPackageName;
 
     public GLRenderer(Context context) {
         mResources = context.getResources();
-        mRenderables = new LinkedList<Renderable>();
+        mRenderables = new LinkedList<>();
+        mRenderablesQueue = new LinkedList<>();
         mPackageName = context.getPackageName();
+        // mTextureNames TODO
+        mPrograms = new ArrayList<>();
+        mTextureIDs = new ArrayList<>();
     }
 
     @Override
@@ -59,24 +62,18 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     private void ortho(float left, float right, float bottom, float top) {
         Matrix.setIdentityM(mOrtho, 0);
-        Matrix.orthoM(mOrtho, 0, left, right, bottom, top, 0.0f, 1.0f);
+        Matrix.orthoM(mOrtho, 0, left, right, bottom, top, -2.0f, 2.0f);
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        InputStream vertInput = mResources.openRawResource(R.raw.vert);
-        InputStream fragInput = mResources.openRawResource(R.raw.frag);
-        mProgram = linkProgram(
-                loadShader(GLES20.GL_VERTEX_SHADER, vertInput),
-                loadShader(GLES20.GL_FRAGMENT_SHADER, fragInput)
-        );
-        GLES20.glUseProgram(mProgram);
-        mVertexAttrib = GLES20.glGetAttribLocation(mProgram, "Vertex");
-        mMatLocation = GLES20.glGetUniformLocation(mProgram, "M");
-        mColorLocation = GLES20.glGetUniformLocation(mProgram, "color");
+        mPrograms.clear();
+        mPrograms.add(new TextureShader(loadProgram(R.raw.texv, R.raw.texf)));
+        mPrograms.add(new ColorShader(loadProgram(R.raw.colorv, R.raw.colorf)));
+
         mVBO = createVertexArray();
 
-        // int testTex = loadTexture();
+        mTextureIDs.add(loadTexture("test"));
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
@@ -87,16 +84,19 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mVBO);
-        GLES20.glEnableVertexAttribArray(mVertexAttrib);
-        GLES20.glVertexAttribPointer(mVertexAttrib, 2, GLES20.GL_FLOAT, false, 4 * 2, 0);
 
-        float[] mat = new float[16];
+        if (mRenderablesQueue.size() > 0) {
+            for (Renderable r : mRenderablesQueue)
+                r.init(this);
+            mRenderables.addAll(mRenderablesQueue);
+            mRenderablesQueue.clear();
+        }
+
         for (Renderable r : mRenderables) {
             r.prerender(this);
             r.render(this);
         }
 
-        GLES20.glDisableVertexAttribArray(mVertexAttrib);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }
 
@@ -124,6 +124,15 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         }
 
         return shader;
+    }
+
+    private int loadProgram(int vert, int frag) {
+        InputStream vertInput = mResources.openRawResource(vert);
+        InputStream fragInput = mResources.openRawResource(frag);
+        return linkProgram(
+                loadShader(GLES20.GL_VERTEX_SHADER, vertInput),
+                loadShader(GLES20.GL_FRAGMENT_SHADER, fragInput)
+        );
     }
 
     private int linkProgram(int vert, int frag) {
@@ -173,24 +182,15 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     }
 
     public void registerRenderable(List<Renderable> renderables) {
-        mRenderables.addAll(renderables);
+        mRenderablesQueue.addAll(renderables);
     }
 
     public void registerRenderable(Renderable renderable) {
-        mRenderables.add(renderable);
+        mRenderablesQueue.add(renderable);
     }
 
     public float[] getOrtho() { return mOrtho; }
 
-    public int getMatrixLocation() {
-        return mMatLocation;
-    }
-
-    public int getColorLocation() {
-        return mColorLocation;
-    }
-
-    /*
     private int loadTexture(String textureName) {
         int resId = mResources.getIdentifier(textureName, "drawable", mPackageName);
         if (resId == 0) {
@@ -199,8 +199,34 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
-        // Bitmap bitmap = BitmapFactory.decodeResource(mResources, resId,)
+        Bitmap bitmap = BitmapFactory.decodeResource(mResources, resId, options);
+
+        int[]tex = new int[1];
+        GLES20.glGenTextures(1, IntBuffer.wrap(tex));
+
+        if (tex[0] != 0) {
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, tex[0]);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+            bitmap.recycle();
+        } else {
+            Log.e("texture", "error loading image \'" + textureName + "\'");
+        }
+        return tex[0];
     }
-    */
+
+    public ColorShader getColorProgram() {
+        return (ColorShader)mPrograms.get(1);
+    }
+
+    public TextureShader getTextureProgram() {
+        return (TextureShader)mPrograms.get(0);
+    }
+
+    public int getTexture(int index) {
+        return mTextureIDs.get(index);
+    }
 
 }
