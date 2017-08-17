@@ -61,6 +61,13 @@ public class TestShape2 extends Renderable {
         mY = renderer.getScreenHeight() / 2 - mH / 2;
     }
 
+    @Override
+    public void prerender(GLRenderer renderer) {
+        Random random = new Random();
+        mX = random.nextFloat() * renderer.getScreenWidth();
+        mY = random.nextFloat() * renderer.getScreenHeight();
+    }
+
     private float mW, mH;
     private float mX, mY;
 }
