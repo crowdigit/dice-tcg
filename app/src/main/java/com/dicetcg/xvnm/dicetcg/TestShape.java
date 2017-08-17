@@ -1,15 +1,14 @@
 package com.dicetcg.xvnm.dicetcg;
 
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
+import com.dicetcg.xvnm.dicetcg.render.Renderable;
+
 import java.util.Random;
 
 public class TestShape extends Renderable {
 
     private float mR, mG, mB;
     private float mW, mH;
-
-    public int getTextureID() {
-        return 0;
-    }
 
     public float getX() {
         return 0;

@@ -1,5 +1,8 @@
 package com.dicetcg.xvnm.dicetcg;
 
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
+import com.dicetcg.xvnm.dicetcg.render.Renderable;
+
 import java.util.Random;
 
 /**
@@ -7,11 +10,6 @@ import java.util.Random;
  */
 
 public class TestShape2 extends Renderable {
-
-    @Override
-    public int getTextureID() {
-        return 0;
-    }
 
     @Override
     public float getX() {
@@ -36,21 +34,6 @@ public class TestShape2 extends Renderable {
     @Override
     public float getH() {
         return mH;
-    }
-
-    @Override
-    public float getR() {
-        return 0;
-    }
-
-    @Override
-    public float getG() {
-        return 0;
-    }
-
-    @Override
-    public float getB() {
-        return 0;
     }
 
     @Override

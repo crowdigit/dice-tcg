@@ -1,4 +1,4 @@
-package com.dicetcg.xvnm.dicetcg;
+package com.dicetcg.xvnm.dicetcg.render;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,6 +9,8 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
+
+import com.dicetcg.xvnm.dicetcg.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -227,6 +229,11 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     public int getTexture(int index) {
         return mTextureIDs.get(index);
+    }
+
+    public void clearRenderables() {
+        mRenderables.clear();
+        mRenderablesQueue.clear();
     }
 
 }

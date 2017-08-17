@@ -1,12 +1,13 @@
 package com.dicetcg.xvnm.dicetcg;
 
-import java.util.Random;
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
+import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
 /**
  * Created by Knock on 2017-08-16.
  */
 
-public class CardBlank extends Renderable{
+public class CardBlank extends Renderable {
 
     private float mR, mG, mB;
     private float mW, mH, W, H;
@@ -14,11 +15,6 @@ public class CardBlank extends Renderable{
 
     CardBlank(float x, float y) {
         mX = x;        mY = y;
-    }
-
-    @Override
-    public int getTextureID() {
-        return 0;
     }
 
     @Override

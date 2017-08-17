@@ -4,32 +4,23 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
+import com.dicetcg.xvnm.dicetcg.render.GLView;
+import com.dicetcg.xvnm.dicetcg.render.Renderable;
+import com.dicetcg.xvnm.dicetcg.xvnm_implements.MainUI;
+import com.dicetcg.xvnm.dicetcg.xvnm_implements.UI;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
+    private UI mCurrentUI;
+    private ArrayList<UI> mUIs;
     private GLView mGLView;
-
-    int PlayerHP = 0;
-
-    int[] PDH = new int[]{0,0,0};     //DiceHP  왼쪽에서 오른쪽 순서로
-    int[] PDT = new int[]{0,0,0};     //DiceTop
-    int[] PDB = new int[]{0,0,0};     //DiceBottom
-
-    int EnemyHP = 0;
-
-    int[] EDH = new int[]{0,0,0};     //DiceHP
-    int[] EDT = new int[]{0,0,0};     //DiceTop
-    int[] EDB = new int[]{0,0,0};     //DiceBottom
-
-    int diceNum = 0;
-    int gameOverFlag = 0;
-    int playerTimeFlag = 0;
-
-    //Read myCardDB
 
     List<String> myCardName = new ArrayList<String>();
     List<Integer> myCardHP = new ArrayList<Integer>();
@@ -46,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGLView = new GLView(this);
+        mGLView.setOnTouchListener(this);
         setContentView(mGLView);
 
         //Renderable test1 = new TestShape2();
@@ -58,22 +50,17 @@ public class MainActivity extends AppCompatActivity {
         //getRenderer().registerRenderable(test1);
         //getRenderer().registerRenderable(test2);
 
+        mUIs = new ArrayList<>();
+        mUIs.add(new MainUI());
+        mCurrentUI = mUIs.get(0);
+        mCurrentUI.start(getRenderer());
+
         myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
         AddCard();           //나중에 DB 불러왔을 때 DB가 비었다면 그 때만 실행하는 방향으로
 
         if (android.os.Build.VERSION.SDK_INT >= 11)
             mGLView.setPreserveEGLContextOnPause(true);
 
-        Renderable PlayerCard01 = new CardBlank(50,100);
-        Renderable PlayerCard02 = new CardBlank(300,100);
-        Renderable PlayerCard03 = new CardBlank(550,100);
-
-        getRenderer().registerRenderable(PlayerCard01);
-        getRenderer().registerRenderable(PlayerCard02);
-        getRenderer().registerRenderable(PlayerCard03);
-
-        myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
-        AddCard();
     }
 
     public GLRenderer getRenderer() {
@@ -81,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AddCard(){
-
         int HP;
         int AC;
         int SC;         // Summon Cost
@@ -222,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "데이터 저장 완료", Toast.LENGTH_SHORT).show();
     }
 
+
     public void ReadCard(){
         String select_data;
         select_data = "select * from myCardDB;";
@@ -258,4 +245,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return mCurrentUI.onTouch(event);
+    }
 }

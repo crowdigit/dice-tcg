@@ -1,9 +1,7 @@
-package com.dicetcg.xvnm.dicetcg;
+package com.dicetcg.xvnm.dicetcg.render;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-
-import java.nio.FloatBuffer;
 
 /**
  * Created by xvnm on 8/15/17.
@@ -11,7 +9,6 @@ import java.nio.FloatBuffer;
 
 public abstract class Renderable {
 
-    abstract public int getTextureID();
     abstract public float getX();
     abstract public float getY();
     abstract public float getZ();
@@ -19,9 +16,17 @@ public abstract class Renderable {
     abstract public float getW();
     abstract public float getH();
 
-    abstract public float getR();
-    abstract public float getG();
-    abstract public float getB();
+    public float getR() {
+        return 0;
+    }
+
+    public float getG() {
+        return 0;
+    }
+
+    public float getB() {
+        return 0;
+    }
 
     private int mTexID = -1;
     private boolean mRenderTexture = false;
@@ -42,7 +47,7 @@ public abstract class Renderable {
 
     public void init(GLRenderer renderer) { }
 
-    final public void render(GLRenderer renderer) {
+    public void render(GLRenderer renderer) {
         Shader s = null;
         if (mRenderTexture) {
             s = renderer.getTextureProgram();
