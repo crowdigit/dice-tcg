@@ -3,13 +3,12 @@ package com.dicetcg.xvnm.dicetcg;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.GLView;
+import com.dicetcg.xvnm.dicetcg.render.Renderable;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.MainUI;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.UI;
 
@@ -17,11 +16,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
-    private GLView mGLView;
-
-    CardDBHandler cardDB;
     private UI mCurrentUI;
     private ArrayList<UI> mUIs;
+    private GLView mGLView;
+
+    CardDBHandler myCardDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +34,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         mCurrentUI = mUIs.get(0);
         mCurrentUI.start(getRenderer());
 
-        cardDB = new CardDBHandler(this, "card.db", null, 1);
-        // AddCard();
+        myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
+        AddCard();           //나중에 DB 불러왔을 때 DB가 비었다면 그 때만 실행하는 방향으로
+
+        if (android.os.Build.VERSION.SDK_INT >= 11)
+            mGLView.setPreserveEGLContextOnPause(true);
+
+        myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
+        AddCard();
     }
 
     public GLRenderer getRenderer() {
@@ -45,36 +50,136 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void AddCard(){
         int HP;
+        int AC;
+        int SC;         // Summon Cost
+        int MC;         // Maintain Cost
         int DiceTop;
         int DiceBottom;
         int DiceMax;
+
         String name;
         String insert_data;
-        SQLiteDatabase db;
 
-        name = "암무트"; HP = 2100; DiceTop = 2000; DiceBottom = 1700; DiceMax = 5;
-        insert_data = "insert into card values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
-        db = cardDB.getWritableDatabase();
+        SQLiteDatabase db = myCardDB.getWritableDatabase();;
+
+        name = "amute"; HP = 2100; AC = 0; SC = 6; MC = 2; DiceTop = 2000; DiceBottom = 1700; DiceMax = 5;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
-        name = "빅풋"; HP = 2000; DiceTop = 2300; DiceBottom = 1400; DiceMax = 3;
-        insert_data = "insert into card values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
-        db = cardDB.getWritableDatabase();
+        name = "bigfoot"; HP = 2000; AC = 0; SC = 4; MC = 4; DiceTop = 2300; DiceBottom = 1400; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
-        name = "피빛의기사"; HP = 2300; DiceTop = 2000; DiceBottom = 1500; DiceMax = 3;
-        insert_data = "insert into card values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
-        db = cardDB.getWritableDatabase();
+        name = "bloodknight"; HP = 2300; AC = 400; SC = 6; MC = 4; DiceTop = 2000; DiceBottom = 1500; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
-        name = "본건"; HP = 2100; DiceTop = 2100; DiceBottom = 1000; DiceMax = 2;
-        insert_data = "insert into card values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
-        db = cardDB.getWritableDatabase();
+        name = "bongun"; HP = 2100; AC = 100; SC = 4; MC = 4; DiceTop = 2100; DiceBottom = 1000; DiceMax = 2;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
-        name = "청이"; HP = 2400; DiceTop = 2300; DiceBottom = 1900; DiceMax = 4;
-        insert_data = "insert into card values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
-        db = cardDB.getWritableDatabase();
+        name = "chung"; HP = 2400; AC = 200; SC = 6; MC = 4; DiceTop = 2300; DiceBottom = 1900; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "cinoby"; HP = 1900; AC = 200; SC = 5; MC = 2; DiceTop = 1600; DiceBottom = 1200; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "clock"; HP = 1900; AC = 500; SC = 6; MC = 4; DiceTop = 2100; DiceBottom = 1700; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "darkframe"; HP = 2400; AC = 200; SC = 5; MC = 3; DiceTop = 1800; DiceBottom = 1400; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "darkill"; HP = 2500; AC = 100; SC = 7; MC = 4; DiceTop = 2400; DiceBottom = 1500; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "darkpriest"; HP = 2100; AC = 200; SC = 5; MC = 3; DiceTop = 2000; DiceBottom = 1700; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "haty"; HP = 2400; AC = 200; SC = 7; MC = 3; DiceTop = 2800; DiceBottom = 1600; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "honet"; HP = 900; AC = 0; SC = 3; MC = 0; DiceTop = 1700; DiceBottom = 700; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "horong"; HP = 600; AC = 0; SC = 1; MC = 0; DiceTop = 1200; DiceBottom = 200; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "marin"; HP = 1200; AC = 0; SC = 2; MC = 1; DiceTop = 1100; DiceBottom = 900; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "mimic"; HP = 700; AC = 300; SC = 1; MC = 0; DiceTop = 600; DiceBottom = 400; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "muka"; HP = 1000; AC = 100; SC = 1; MC = 0; DiceTop = 700; DiceBottom = 200; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "munak"; HP = 1600; AC = 200; SC = 3; MC = 1; DiceTop = 1200; DiceBottom = 900; DiceMax = 5;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "owlduke"; HP = 1200; AC = 0; SC = 6; MC = 1; DiceTop = 2400; DiceBottom = 1000; DiceMax = 2;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "permiler"; HP = 1100; AC = 0; SC = 4; MC = 1; DiceTop = 1800; DiceBottom = 1100; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "poporing"; HP = 1600; AC = 0; SC = 4; MC = 2; DiceTop = 2100; DiceBottom = 1200; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "poring"; HP = 600; AC = 0; SC = 1; MC = 0; DiceTop = 800; DiceBottom = 400; DiceMax = 2;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "pupa"; HP = 800; AC = 200; SC = 1; MC = 0; DiceTop = 600; DiceBottom = 300; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "raflecia"; HP = 1600; AC = 300; SC = 6; MC = 4; DiceTop = 1300; DiceBottom = 1100; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "rocker"; HP = 1300; AC = 0; SC = 4; MC = 1; DiceTop = 1600; DiceBottom = 800; DiceMax = 2;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "rodafrog"; HP = 1100; AC = 0; SC = 2; MC = 0; DiceTop = 800; DiceBottom = 500; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "sohyei"; HP = 1800; AC = 0; SC = 4; MC = 2; DiceTop = 1800; DiceBottom = 1400; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "spoar"; HP = 1500; AC = 0; SC = 3; MC = 1; DiceTop = 1100; DiceBottom = 900; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "undead"; HP = 1900; AC = 0; SC = 5; MC = 3; DiceTop = 2600; DiceBottom = 1300; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "willow"; HP = 1900; AC = 0; SC = 4; MC = 2; DiceTop = 1900; DiceBottom = 1100; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        db.execSQL(insert_data);
+
+        name = "wormtail"; HP = 1100; AC = 0; SC = 2; MC = 0; DiceTop = 1000; DiceBottom = 100; DiceMax = 2;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
         db.close();

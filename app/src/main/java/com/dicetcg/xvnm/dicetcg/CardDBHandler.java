@@ -18,14 +18,13 @@ public class CardDBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String create_table;
-        create_table = "create table if not exists card(CardName text, HP integer, DiceTop integer, DiceBottom integer)";
-        String input_data;
+        create_table = "create table if not exists myCardDB(CardName text, HP integer, AC integer, SC integer, MC integer, DiceTop integer, DiceBottom integer, DiceMax integer);";
         sqLiteDatabase.execSQL(create_table);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("drop table if exists card");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS myCardDB");
         onCreate(sqLiteDatabase);
     }
 /*

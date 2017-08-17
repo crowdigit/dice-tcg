@@ -50,10 +50,13 @@ public class TestShape extends Renderable {
 
     @Override
     public void prerender(GLRenderer renderer) {
-        Random random = new Random();
+       /* Random random = new Random();
         mR = random.nextFloat();
         mG = random.nextFloat();
         mB = random.nextFloat();
+        mW = renderer.getScreenWidth();
+        mH = renderer.getScreenHeight(); */
+
     }
 
 }
