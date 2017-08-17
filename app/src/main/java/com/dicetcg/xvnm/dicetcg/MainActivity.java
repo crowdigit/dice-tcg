@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         mGLView.setOnTouchListener(this);
         setContentView(mGLView);
 
-<<<<<<< HEAD
         //Renderable test1 = new TestShape2();
         //test1.renderTexture(true);
         //test1.setTexture(0);
@@ -51,9 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         //getRenderer().registerRenderable(test1);
         //getRenderer().registerRenderable(test2);
-=======
+
         // setContentView(R.layout.debug); // -- uncommet here to debug
->>>>>>> 95a11a8160427d614ec360341c6f88532cfe607a
 
         mUIs = new ArrayList<>();
         mUIs.add(new MainUI(this));
