@@ -10,7 +10,7 @@ abstract public class Touchable extends Renderable {
 
     boolean checkTouch(float x, float y) {
         if ((x >= getX() && x <= getX() + getW())
-                && (y <= getY() && y >= getY() + getH()))
+                && (y >= getY() && y <= getY() + getH()))
             return true;
         return false;
     }

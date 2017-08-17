@@ -65,6 +65,7 @@ public abstract class Renderable {
         Matrix.scaleM(mat, 0, getW(), getH(), 1.0f);
         Matrix.multiplyMM(mat, 0, renderer.getOrtho(), 0, mat, 0);
         s.uniformMatrix(mat);
+        s.uniformFade(renderer.getFade());
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
 

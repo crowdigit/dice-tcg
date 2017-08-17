@@ -1,8 +1,8 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
+import com.dicetcg.xvnm.dicetcg.MainActivity;
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
@@ -12,8 +12,14 @@ import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
 public class MainUI extends Renderable implements UI {
 
+    public MainUI(MainActivity activity) {
+        mActivity = activity;
+    }
+
+    private MainActivity mActivity;
+
     @Override
-    public void start(GLRenderer renderer) {
+    public void start() {
         button = new Touchable() {
             @Override
             public float getX() {
@@ -55,16 +61,19 @@ public class MainUI extends Renderable implements UI {
 
         };
 
-        renderer.clearRenderables();
-        renderer.registerRenderable(this);
-        renderer.registerRenderable(button);
+        mActivity.getRenderer().clearRenderables();
+        mActivity.getRenderer().registerRenderable(this);
+        mActivity.getRenderer().registerRenderable(button);
     }
 
     @Override
     public boolean onTouch(MotionEvent event) {
-        if (button.checkTouch(event.getX(), event.getY()));
-            Log.i("asfd", "zxcv");
-        return true;
+        if (!mFadeStarted && button.checkTouch(event.getX(), mH - event.getY())) {
+            // mActivity.setCurrentUI(1);
+            mFadeStartedTime = System.currentTimeMillis();
+            mFadeStarted = true;
+        }
+        return false;
     }
 
     @Override
@@ -122,7 +131,19 @@ public class MainUI extends Renderable implements UI {
         button.render(renderer);
     }
 
+    @Override
+    public void prerender(GLRenderer renderer) {
+        if (mFadeStarted) {
+            float fade = (1000 - (System.currentTimeMillis() - mFadeStartedTime)) / 1000.f;
+            if (fade < 0)
+                mActivity.setCurrentUI(1);
+            renderer.setFade(fade);
+        }
+    }
+
     private float mW, mH;
     private Touchable button;
+    private long mFadeStartedTime;
+    private boolean mFadeStarted;
 
 }
