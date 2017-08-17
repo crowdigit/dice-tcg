@@ -1,9 +1,13 @@
 package com.dicetcg.xvnm.dicetcg;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +29,17 @@ public class MainActivity extends AppCompatActivity {
     int gameOverFlag = 0;
     int playerTimeFlag = 0;
 
+    //Read myCardDB
+
+    List<String> myCardName = new ArrayList<String>();
+    List<Integer> myCardHP = new ArrayList<Integer>();
+    List<Integer> myCardAC = new ArrayList<Integer>();
+    List<Integer> myCardSC = new ArrayList<Integer>();
+    List<Integer> myCardMC = new ArrayList<Integer>();
+    List<Integer> myDiceTop = new ArrayList<Integer>();
+    List<Integer> myDiceBottom = new ArrayList<Integer>();
+    List<Integer> myDiceMax = new ArrayList<Integer>();
+
     CardDBHandler myCardDB;
 
     @Override
@@ -33,15 +48,15 @@ public class MainActivity extends AppCompatActivity {
         mGLView = new GLView(this);
         setContentView(mGLView);
 
-        Renderable test1 = new TestShape2();
-        test1.renderTexture(true);
-        test1.setTexture(0);
+        //Renderable test1 = new TestShape2();
+        //test1.renderTexture(true);
+        //test1.setTexture(0);
 
-        Renderable test2 = new TestShape();
-        test2.renderTexture(false);
+        //Renderable test2 = new TestShape();
+        //test2.renderTexture(false);
 
-        getRenderer().registerRenderable(test1);
-        getRenderer().registerRenderable(test2);
+        //getRenderer().registerRenderable(test1);
+        //getRenderer().registerRenderable(test2);
 
         myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
         AddCard();           //나중에 DB 불러왔을 때 DB가 비었다면 그 때만 실행하는 방향으로
@@ -201,7 +216,46 @@ public class MainActivity extends AppCompatActivity {
         db.execSQL(insert_data);
 
         db.close();
+
+        ReadCard();
+
         Toast.makeText(this, "데이터 저장 완료", Toast.LENGTH_SHORT).show();
+    }
+
+    public void ReadCard(){
+        String select_data;
+        select_data = "select * from myCardDB;";
+
+        SQLiteDatabase db = myCardDB.getReadableDatabase();
+        Cursor cursor = db.rawQuery(select_data, null);
+
+        while(cursor.moveToNext())
+        {
+            String mName = cursor.getString(cursor.getColumnIndex("CardName"));
+            myCardName.add(mName);
+
+            int mHP = cursor.getInt(cursor.getColumnIndex("HP"));
+            myCardHP.add(mHP);
+
+            int mAC = cursor.getInt(cursor.getColumnIndex("AC"));
+            myCardAC.add(mAC);
+
+            int mSC = cursor.getInt(cursor.getColumnIndex("SC"));
+            myCardSC.add(mSC);
+
+            int mMC = cursor.getInt(cursor.getColumnIndex("MC"));
+            myCardMC.add(mMC);
+
+            int mDT = cursor.getInt(cursor.getColumnIndex("DiceTop"));
+            myDiceTop.add(mDT);
+
+            int mDB = cursor.getInt(cursor.getColumnIndex("DiceBottom"));
+            myDiceBottom.add(mDB);
+
+            int mDM = cursor.getInt(cursor.getColumnIndex("DiceMax"));
+            myDiceMax.add(mDM);
+        }
+
     }
 
 }

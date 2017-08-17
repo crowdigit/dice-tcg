@@ -38,12 +38,12 @@ public class CardBlank extends Renderable{
 
     @Override
     public float getW() {
-        return W;
+        return mW;
     }
 
     @Override
     public float getH() {
-        return H;
+        return mH;
     }
 
     @Override
@@ -65,6 +65,5 @@ public class CardBlank extends Renderable{
     public void prerender(GLRenderer renderer) {
         mW = renderer.getScreenWidth();
         mH = renderer.getScreenHeight();
-        W = W/H * 600;
     }
 }
