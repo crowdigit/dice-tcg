@@ -3,47 +3,37 @@ package com.dicetcg.xvnm.dicetcg;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
+
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
+import com.dicetcg.xvnm.dicetcg.render.GLView;
+import com.dicetcg.xvnm.dicetcg.xvnm_implements.MainUI;
+import com.dicetcg.xvnm.dicetcg.xvnm_implements.UI;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     private GLView mGLView;
 
-    int PlayerHP = 0;
-
-    int[] PDH = new int[]{0,0,0};     //DiceHP  왼쪽에서 오른쪽 순서로
-    int[] PDT = new int[]{0,0,0};     //DiceTop
-    int[] PDB = new int[]{0,0,0};     //DiceBottom
-
-    int EnemyHP = 0;
-
-    int[] EDH = new int[]{0,0,0};     //DiceHP
-    int[] EDT = new int[]{0,0,0};     //DiceTop
-    int[] EDB = new int[]{0,0,0};     //DiceBottom
-
-    int diceNum = 0;
-    int gameOverFlag = 0;
-    int playerTimeFlag = 0;
-
     CardDBHandler cardDB;
+    private UI mCurrentUI;
+    private ArrayList<UI> mUIs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGLView = new GLView(this);
+        mGLView.setOnTouchListener(this);
         setContentView(mGLView);
 
-        Renderable test1 = new TestShape2();
-        test1.renderTexture(true);
-        test1.setTexture(0);
-
-        Renderable test2 = new TestShape();
-        test2.renderTexture(false);
-
-        getRenderer().registerRenderable(test1);
-        getRenderer().registerRenderable(test2);
+        mUIs = new ArrayList<>();
+        mUIs.add(new MainUI());
+        mCurrentUI = mUIs.get(0);
+        mCurrentUI.start(getRenderer());
 
         cardDB = new CardDBHandler(this, "card.db", null, 1);
         // AddCard();
@@ -54,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AddCard(){
-
         int HP;
         int DiceTop;
         int DiceBottom;
@@ -92,4 +81,8 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "데이터 저장 완료", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return mCurrentUI.onTouch(event);
+    }
 }

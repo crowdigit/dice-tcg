@@ -1,4 +1,4 @@
-package com.dicetcg.xvnm.dicetcg;
+package com.dicetcg.xvnm.dicetcg.render;
 
 import android.opengl.GLES20;
 
