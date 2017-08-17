@@ -1,10 +1,21 @@
 package com.dicetcg.xvnm.dicetcg;
 
+import java.util.Random;
+
 /**
  * Created by Knock on 2017-08-16.
  */
 
 public class CardBlank extends Renderable{
+
+    private float mR, mG, mB;
+    private float mW, mH, W, H;
+    private float mX, mY;
+
+    CardBlank(float x, float y) {
+        mX = x;        mY = y;
+    }
+
     @Override
     public int getTextureID() {
         return 0;
@@ -12,12 +23,12 @@ public class CardBlank extends Renderable{
 
     @Override
     public float getX() {
-        return 0;
+        return mX;
     }
 
     @Override
     public float getY() {
-        return 0;
+        return mY;
     }
 
     @Override
@@ -27,17 +38,17 @@ public class CardBlank extends Renderable{
 
     @Override
     public float getW() {
-        return 0;
+        return W;
     }
 
     @Override
     public float getH() {
-        return 0;
+        return H;
     }
 
     @Override
     public float getR() {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -48,5 +59,12 @@ public class CardBlank extends Renderable{
     @Override
     public float getB() {
         return 0;
+    }
+
+    @Override
+    public void prerender(GLRenderer renderer) {
+        mW = renderer.getScreenWidth();
+        mH = renderer.getScreenHeight();
+        W = W/H * 600;
     }
 }

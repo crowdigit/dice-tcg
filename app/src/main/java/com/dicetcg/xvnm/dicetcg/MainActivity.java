@@ -25,30 +25,29 @@ public class MainActivity extends AppCompatActivity {
     int gameOverFlag = 0;
     int playerTimeFlag = 0;
 
-    CardDBHandler cardDB;
+    CardDBHandler myCardDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGLView = new GLView(this);
         setContentView(mGLView);
-        Renderable test = new TestShape();
-        getRenderer().registerRenderable(test);
 
-        cardDB = new CardDBHandler(this, "cardDB.db", null, 1);
-        AddCard();                                              //나중에 DB 불러왔을 때 DB가 비었다면 실행하는 방향으로
-
+        myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
+        AddCard();           //나중에 DB 불러왔을 때 DB가 비었다면 그 때만 실행하는 방향으로
 
         if (android.os.Build.VERSION.SDK_INT >= 11)
             mGLView.setPreserveEGLContextOnPause(true);
 
-        //Renderable card = new TestShape("asdf", 100, 0.0f);
-        //TestShape carbB = new TestShape("aszxczxv", 200, 200.0f);
+        Renderable PlayerCard01 = new CardBlank(50,100);
+        Renderable PlayerCard02 = new CardBlank(300,100);
+        Renderable PlayerCard03 = new CardBlank(550,100);
 
-        //getRenderer().registerRenderable(card);
-        //getRenderer().registerRenderable(carbB);
+        getRenderer().registerRenderable(PlayerCard01);
+        getRenderer().registerRenderable(PlayerCard02);
+        getRenderer().registerRenderable(PlayerCard03);
 
-        cardDB = new CardDBHandler(this, "cardDB.db", null, 1);
+        myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
         AddCard();
     }
 
@@ -59,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
     public void AddCard(){
 
         int HP;
+        int AC;
+        int SC;         // Summon Cost
+        int MC;         // Maintain Cost
         int DiceTop;
         int DiceBottom;
         int DiceMax;
@@ -66,27 +68,26 @@ public class MainActivity extends AppCompatActivity {
         String name;
         String insert_data;
 
-        SQLiteDatabase db = cardDB.getWritableDatabase();;
+        SQLiteDatabase db = myCardDB.getWritableDatabase();;
 
-        name = "암무트"; HP = 2100; DiceTop = 2000; DiceBottom = 1700; DiceMax = 5;
-        insert_data = "insert into cardDB values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
-        System.out.print(insert_data);
+        name = "amute"; HP = 2100; AC = 0; SC = 6; MC = 2; DiceTop = 2000; DiceBottom = 1700; DiceMax = 5;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
-        name = "빅풋"; HP = 2000; DiceTop = 2300; DiceBottom = 1400; DiceMax = 3;
-        insert_data = "insert into cardDB values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        name = "bigfoot"; HP = 2000; AC = 0; SC = 4; MC = 4; DiceTop = 2300; DiceBottom = 1400; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
-        name = "피빛의기사"; HP = 2300; DiceTop = 2000; DiceBottom = 1500; DiceMax = 3;
-        insert_data = "insert into cardDB values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        name = "bloodknight"; HP = 2300; AC = 400; SC = 6; MC = 4; DiceTop = 2000; DiceBottom = 1500; DiceMax = 3;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
-        name = "본건"; HP = 2100; DiceTop = 2100; DiceBottom = 1000; DiceMax = 2;
-        insert_data = "insert into cardDB values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        name = "bongun"; HP = 2100; AC = 100; SC = 4; MC = 4; DiceTop = 2100; DiceBottom = 1000; DiceMax = 2;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
-        name = "청이"; HP = 2400; DiceTop = 2300; DiceBottom = 1900; DiceMax = 4;
-        insert_data = "insert into cardDB values('" + name + "'," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        name = "chung"; HP = 2400; AC = 200; SC = 6; MC = 4; DiceTop = 2300; DiceBottom = 1900; DiceMax = 4;
+        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
         db.close();
