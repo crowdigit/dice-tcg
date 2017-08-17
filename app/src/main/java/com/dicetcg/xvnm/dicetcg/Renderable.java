@@ -23,7 +23,8 @@ public abstract class Renderable {
     abstract public float getG();
     abstract public float getB();
 
-    private int mTexID;
+    private int mTexID = -1;
+    private boolean mRenderTexture = false;
 
     public int getTexture() {
         return mTexID;
@@ -33,18 +34,39 @@ public abstract class Renderable {
         mTexID = tex;
     }
 
-    public void prerender(GLRenderer renderer) {
+    public void renderTexture(boolean f) {
+        mRenderTexture = f;
     }
 
+    public void prerender(GLRenderer renderer) { }
+
+    public void init(GLRenderer renderer) { }
+
     final public void render(GLRenderer renderer) {
+        Shader s = null;
+        if (mRenderTexture) {
+            s = renderer.getTextureProgram();
+            s.use();
+            ((TextureShader)s).bindTexture(renderer.getTexture(getTexture()));
+        } else {
+            s = renderer.getColorProgram();
+            s.use();
+            ((ColorShader)s).uniformColor(getR(), getG(), getB());
+        }
+
         float[]mat = new float[16];
         Matrix.setIdentityM(mat, 0);
         Matrix.translateM(mat, 0, getX(), getY(), getZ());
         Matrix.scaleM(mat, 0, getW(), getH(), 1.0f);
         Matrix.multiplyMM(mat, 0, renderer.getOrtho(), 0, mat, 0);
-        GLES20.glUniformMatrix4fv(renderer.getMatrixLocation(), 1, false, FloatBuffer.wrap(mat));
-        GLES20.glUniform3f(renderer.getColorLocation(), getR(), getG(), getB());
+        s.uniformMatrix(mat);
+
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
+
+        s.deuse();
+
+        if (mRenderTexture)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
 }

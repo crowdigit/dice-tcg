@@ -34,8 +34,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mGLView = new GLView(this);
         setContentView(mGLView);
-        Renderable test = new TestShape();
-        getRenderer().registerRenderable(test);
+
+        Renderable test1 = new TestShape2();
+        test1.renderTexture(true);
+        test1.setTexture(0);
+
+        Renderable test2 = new TestShape();
+        test2.renderTexture(false);
+
+        getRenderer().registerRenderable(test1);
+        getRenderer().registerRenderable(test2);
 
         cardDB = new CardDBHandler(this, "card.db", null, 1);
         // AddCard();
