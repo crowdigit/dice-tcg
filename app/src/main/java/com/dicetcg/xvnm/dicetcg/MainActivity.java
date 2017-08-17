@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.GLView;
 import com.dicetcg.xvnm.dicetcg.render.Renderable;
+import com.dicetcg.xvnm.dicetcg.xvnm_implements.GameUI;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.MainUI;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.UI;
 
@@ -29,10 +30,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         mGLView.setOnTouchListener(this);
         setContentView(mGLView);
 
+        // setContentView(R.layout.debug); // -- uncommet here to debug
+
         mUIs = new ArrayList<>();
-        mUIs.add(new MainUI());
+        mUIs.add(new MainUI(this));
+        mUIs.add(new GameUI(this));
         mCurrentUI = mUIs.get(0);
-        mCurrentUI.start(getRenderer());
+        mCurrentUI.start();
 
         myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
         AddCard();           //나중에 DB 불러왔을 때 DB가 비었다면 그 때만 실행하는 방향으로
@@ -40,8 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if (android.os.Build.VERSION.SDK_INT >= 11)
             mGLView.setPreserveEGLContextOnPause(true);
 
-        myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
-        AddCard();
     }
 
     public GLRenderer getRenderer() {
@@ -189,5 +191,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return mCurrentUI.onTouch(event);
+    }
+
+    public void setCurrentUI(int index) {
+        mCurrentUI = mUIs.get(index);
+        mCurrentUI.start();
     }
 }

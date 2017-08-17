@@ -14,6 +14,7 @@ abstract public class Shader {
         mProgram = program;
         mVertexLocation = GLES20.glGetAttribLocation(mProgram, "Vertex");
         mMatrixLocation = GLES20.glGetUniformLocation(mProgram, "M");
+        mFadeLocation = GLES20.glGetUniformLocation(mProgram, "fade");
     }
 
     public void use() {
@@ -30,6 +31,10 @@ abstract public class Shader {
         GLES20.glUniformMatrix4fv(mMatrixLocation, 1, false, FloatBuffer.wrap(mat));
     }
 
+    public void uniformFade(float fade) {
+        GLES20.glUniform1f(mFadeLocation, fade);
+    }
+
     public int getProgram() {
         return mProgram;
     }
@@ -37,4 +42,5 @@ abstract public class Shader {
     private int mProgram;
     private int mVertexLocation;
     private int mMatrixLocation;
+    private int mFadeLocation;
 }

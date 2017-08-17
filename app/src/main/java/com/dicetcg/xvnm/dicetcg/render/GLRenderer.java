@@ -53,6 +53,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         // mTextureNames TODO
         mPrograms = new ArrayList<>();
         mTextureIDs = new ArrayList<>();
+        mFade = 1.0f;
     }
 
     @Override
@@ -234,6 +235,16 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     public void clearRenderables() {
         mRenderables.clear();
         mRenderablesQueue.clear();
+    }
+
+    private float mFade;
+
+    public float getFade() {
+        return mFade;
+    }
+
+    public void setFade(float fade) {
+        mFade = fade;
     }
 
 }
