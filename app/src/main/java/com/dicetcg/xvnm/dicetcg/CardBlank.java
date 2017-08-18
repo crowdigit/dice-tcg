@@ -58,7 +58,7 @@ public class CardBlank extends Renderable {
     }
 
     @Override
-    public void prerender(GLRenderer renderer) {
+    public void init(GLRenderer renderer) {
         mW = renderer.getScreenWidth();
         mH = renderer.getScreenHeight();
     }

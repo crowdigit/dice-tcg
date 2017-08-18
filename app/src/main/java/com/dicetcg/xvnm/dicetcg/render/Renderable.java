@@ -43,8 +43,6 @@ public abstract class Renderable {
         mRenderTexture = f;
     }
 
-    public void prerender(GLRenderer renderer) { }
-
     public void init(GLRenderer renderer) { }
 
     public void render(GLRenderer renderer) {

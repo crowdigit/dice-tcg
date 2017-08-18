@@ -6,8 +6,10 @@ import com.dicetcg.xvnm.dicetcg.MainActivity;
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
- * Created by dogtrollin on 8/17/17.
+ * Created by xvnm on 8/17/17.
  */
 
 public class GameUI extends Renderable implements UI {
@@ -21,6 +23,9 @@ public class GameUI extends Renderable implements UI {
         mActivity.getRenderer().clearRenderables();
         mActivity.getRenderer().registerRenderable(this);
         renderTexture(false);
+
+        mFader = new Fader();
+        mFader.start(1000, false);
     }
 
     @Override
@@ -67,9 +72,14 @@ public class GameUI extends Renderable implements UI {
     @Override
     public void render(GLRenderer renderer) {
         super.render(renderer);
+        if (mFader != null) {
+            mFader.render(renderer);
+            if (!mFader.isActive())
+                mFader = null;
+        }
     }
 
     private MainActivity mActivity;
     private int mW, mH;
-    private long mStartedTime;
+    private Fader mFader;
 }

@@ -7,7 +7,7 @@ import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
 /**
- * Created by dogtrollin on 8/17/17.
+ * Created by xvnm on 8/17/17.
  */
 
 public class MainUI extends Renderable implements UI {
@@ -16,10 +16,10 @@ public class MainUI extends Renderable implements UI {
         mActivity = activity;
     }
 
-    private MainActivity mActivity;
-
     @Override
     public void start() {
+        final long fadeStartedTime = System.currentTimeMillis();
+
         button = new Touchable() {
             @Override
             public float getX() {
@@ -64,14 +64,14 @@ public class MainUI extends Renderable implements UI {
         mActivity.getRenderer().clearRenderables();
         mActivity.getRenderer().registerRenderable(this);
         mActivity.getRenderer().registerRenderable(button);
+        mFader = null;
     }
 
     @Override
     public boolean onTouch(MotionEvent event) {
-        if (!mFadeStarted && button.checkTouch(event.getX(), mH - event.getY())) {
-            // mActivity.setCurrentUI(1);
-            mFadeStartedTime = System.currentTimeMillis();
-            mFadeStarted = true;
+        if (mFader == null && button.checkTouch(event.getX(), mH - event.getY())) {
+            mFader = new Fader();
+            mFader.start(1000, true);
         }
         return false;
     }
@@ -127,23 +127,18 @@ public class MainUI extends Renderable implements UI {
 
     @Override
     public void render(GLRenderer renderer) {
+        if (mFader != null && !mFader.isActive())
+            mActivity.setCurrentUI(1);
+
         super.render(renderer);
         button.render(renderer);
+        if (mFader != null)
+            mFader.render(renderer);
     }
 
-    @Override
-    public void prerender(GLRenderer renderer) {
-        if (mFadeStarted) {
-            float fade = (1000 - (System.currentTimeMillis() - mFadeStartedTime)) / 1000.f;
-            if (fade < 0)
-                mActivity.setCurrentUI(1);
-            renderer.setFade(fade);
-        }
-    }
-
+    private MainActivity mActivity;
     private float mW, mH;
     private Touchable button;
-    private long mFadeStartedTime;
-    private boolean mFadeStarted;
+    private Fader mFader;
 
 }

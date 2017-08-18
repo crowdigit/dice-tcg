@@ -95,10 +95,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
             mRenderablesQueue.clear();
         }
 
-        for (Renderable r : mRenderables) {
-            r.prerender(this);
+        for (Renderable r : mRenderables)
             r.render(this);
-        }
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }
