@@ -18,7 +18,8 @@ public class MainUI extends Renderable implements UI {
 
     @Override
     public void start() {
-        final long fadeStartedTime = System.currentTimeMillis();
+        mActivity.getRenderer().clearRenderables();
+        mActivity.getRenderer().registerRenderable(this);
 
         button = new Touchable() {
             @Override
@@ -60,10 +61,12 @@ public class MainUI extends Renderable implements UI {
             private float mW, mH;
 
         };
+        mFader = null;
+    }
 
-        mActivity.getRenderer().clearRenderables();
-        mActivity.getRenderer().registerRenderable(this);
-        mActivity.getRenderer().registerRenderable(button);
+    @Override
+    public void stop() {
+        button = null;
         mFader = null;
     }
 
@@ -71,19 +74,9 @@ public class MainUI extends Renderable implements UI {
     public boolean onTouch(MotionEvent event) {
         if (mFader == null && button.checkTouch(event.getX(), mH - event.getY())) {
             mFader = new Fader();
-            mFader.start(1000, true);
+            mFader.start(500, true);
         }
         return false;
-    }
-
-    @Override
-    public float getX() {
-        return 0;
-    }
-
-    @Override
-    public float getY() {
-        return 0;
     }
 
     @Override
@@ -127,8 +120,10 @@ public class MainUI extends Renderable implements UI {
 
     @Override
     public void render(GLRenderer renderer) {
-        if (mFader != null && !mFader.isActive())
+        if (mFader != null && !mFader.isActive()) {
             mActivity.setCurrentUI(1);
+            return;
+        }
 
         super.render(renderer);
         button.render(renderer);

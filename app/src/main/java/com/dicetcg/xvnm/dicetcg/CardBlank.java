@@ -28,11 +28,6 @@ public class CardBlank extends Renderable {
     }
 
     @Override
-    public float getZ() {
-        return 0;
-    }
-
-    @Override
     public float getW() {
         return mW;
     }
@@ -45,16 +40,6 @@ public class CardBlank extends Renderable {
     @Override
     public float getR() {
         return 1;
-    }
-
-    @Override
-    public float getG() {
-        return 0;
-    }
-
-    @Override
-    public float getB() {
-        return 0;
     }
 
     @Override

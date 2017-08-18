@@ -1,7 +1,7 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
 /**
- * Created by dogtrollin on 8/17/17.
+ * Created by xvnm on 8/17/17.
  */
 
 public class MetaCard {

@@ -9,12 +9,23 @@ import android.opengl.Matrix;
 
 public abstract class Renderable {
 
-    abstract public float getX();
-    abstract public float getY();
-    abstract public float getZ();
+    public float getX() {
+        return 0;
+    }
 
-    abstract public float getW();
-    abstract public float getH();
+    public float getY() {
+        return 0;
+    }
+
+    public float getZ() {
+        return 0;
+    }
+
+    public float getW() {
+        return 0;
+    }
+
+    public float getH() { return 0; }
 
     public float getR() {
         return 0;

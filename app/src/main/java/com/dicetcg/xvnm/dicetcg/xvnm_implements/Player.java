@@ -1,10 +1,20 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
+
+import java.util.ArrayList;
+
 /**
- * Created by dogtrollin on 8/17/17.
+ * Created by xvnm on 8/17/17.
  */
 
-public class Player {
+abstract public class Player {
+
+    Player(GameUI.GameUIController controller) {
+        mDeck = new Deck(controller.getMetaCards());
+        mHand = new MetaCard[5];
+        mHandCount = 0;
+    }
 
     public int getHP() {
         return mHP;
@@ -14,11 +24,22 @@ public class Player {
         mHP = hp;
     }
 
-    public boolean isDefeated() {
-        return mHP <= 0;
+    protected void draw() {
+        for (int i = mHandCount; i < 5; i++) {
+            if (mDeck.getCardCount() > 0) {
+                mHand[mHandCount] = mDeck.draw();
+            } else {
+                setHP(getHP() - 500);
+            }
+        }
     }
+
+    abstract public void takeTurn(Field.Control field, boolean attack);
 
     private int mHP;
     private int mMaxCost, mCost;
+    private Deck mDeck;
+    protected MetaCard[]mHand;
+    protected int mHandCount;
 
 }

@@ -9,12 +9,13 @@ import android.view.View;
 import android.widget.Toast;
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.GLView;
-import com.dicetcg.xvnm.dicetcg.render.Renderable;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.GameUI;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.MainUI;
+import com.dicetcg.xvnm.dicetcg.xvnm_implements.MetaCard;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.UI;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
@@ -23,16 +24,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private ArrayList<UI> mUIs;
     private GLView mGLView;
 
-    List<String> myCardName = new ArrayList<String>();
-    List<Integer> myCardHP = new ArrayList<Integer>();
-    List<Integer> myCardAC = new ArrayList<Integer>();
-    List<Integer> myCardSC = new ArrayList<Integer>();
-    List<Integer> myCardMC = new ArrayList<Integer>();
-    List<Integer> myDiceTop = new ArrayList<Integer>();
-    List<Integer> myDiceBottom = new ArrayList<Integer>();
-    List<Integer> myDiceMax = new ArrayList<Integer>();
-
     CardDBHandler myCardDB;
+
+    private ArrayList<MetaCard> mMetaCards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         mGLView = new GLView(this);
         mGLView.setOnTouchListener(this);
         setContentView(mGLView);
-
-        //Renderable test1 = new TestShape2();
-        //test1.renderTexture(true);
-        //test1.setTexture(0);
-
-        //Renderable test2 = new TestShape();
-        //test2.renderTexture(false);
-
-        //getRenderer().registerRenderable(test1);
-        //getRenderer().registerRenderable(test2);
 
         // setContentView(R.layout.debug); // -- uncommet here to debug
 
@@ -220,31 +204,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         SQLiteDatabase db = myCardDB.getReadableDatabase();
         Cursor cursor = db.rawQuery(select_data, null);
 
-        while(cursor.moveToNext())
-        {
-            String mName = cursor.getString(cursor.getColumnIndex("CardName"));
-            myCardName.add(mName);
+        mMetaCards = new ArrayList<>(30);
 
-            int mHP = cursor.getInt(cursor.getColumnIndex("HP"));
-            myCardHP.add(mHP);
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(cursor.getColumnIndex("CardName"));  // Not used actually
+            int HP = cursor.getInt(cursor.getColumnIndex("HP"));
+            int AC = cursor.getInt(cursor.getColumnIndex("AC"));
+            int summonCost = cursor.getInt(cursor.getColumnIndex("SC"));
+            int maintainCost = cursor.getInt(cursor.getColumnIndex("MC"));
+            int diceTopDamage = cursor.getInt(cursor.getColumnIndex("DiceTop"));
+            int diceBottomDamage = cursor.getInt(cursor.getColumnIndex("DiceBottom"));
+            int diceBottomMax = cursor.getInt(cursor.getColumnIndex("DiceMax"));
 
-            int mAC = cursor.getInt(cursor.getColumnIndex("AC"));
-            myCardAC.add(mAC);
-
-            int mSC = cursor.getInt(cursor.getColumnIndex("SC"));
-            myCardSC.add(mSC);
-
-            int mMC = cursor.getInt(cursor.getColumnIndex("MC"));
-            myCardMC.add(mMC);
-
-            int mDT = cursor.getInt(cursor.getColumnIndex("DiceTop"));
-            myDiceTop.add(mDT);
-
-            int mDB = cursor.getInt(cursor.getColumnIndex("DiceBottom"));
-            myDiceBottom.add(mDB);
-
-            int mDM = cursor.getInt(cursor.getColumnIndex("DiceMax"));
-            myDiceMax.add(mDM);
+            mMetaCards.add(new MetaCard(
+                    diceBottomMax, diceBottomDamage, diceTopDamage,
+                    HP, AC, summonCost, maintainCost
+            ));
         }
 
     }
@@ -255,7 +230,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public void setCurrentUI(int index) {
+        mCurrentUI.stop();
         mCurrentUI = mUIs.get(index);
         mCurrentUI.start();
     }
+
+    public ArrayList<MetaCard> getMetaCards() {
+        return mMetaCards;
+    }
+
 }

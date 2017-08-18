@@ -10,18 +10,6 @@ public class TestShape extends Renderable {
     private float mR, mG, mB;
     private float mW, mH;
 
-    public float getX() {
-        return 0;
-    }
-
-    public float getY() {
-        return 0;
-    }
-
-    public float getZ() {
-        return 0;
-    }
-
     public float getW() {
         return mW;
     }

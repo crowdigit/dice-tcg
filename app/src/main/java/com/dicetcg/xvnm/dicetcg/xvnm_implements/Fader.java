@@ -39,31 +39,6 @@ public class Fader extends Renderable {
         }
     }
 
-    @Override
-    public float getX() {
-        return 0;
-    }
-
-    @Override
-    public float getY() {
-        return 0;
-    }
-
-    @Override
-    public float getZ() {
-        return 0;
-    }
-
-    @Override
-    public float getW() {
-        return 0;
-    }
-
-    @Override
-    public float getH() {
-        return 0;
-    }
-
     public boolean isActive() {
         return mIsActive;
     }

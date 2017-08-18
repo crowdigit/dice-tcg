@@ -79,7 +79,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         mTextureIDs.add(loadTexture("test"));
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glClearDepthf(1.0f);
     }
 
