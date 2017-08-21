@@ -1,5 +1,6 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
 import java.util.ArrayList;
@@ -27,6 +28,17 @@ public class Field extends Renderable {
 
         mUserController = new Control(mUserCard);
         mEnemyController = new Control(mEnemyCard);
+    }
+
+    @Override
+    public void render(GLRenderer renderer) {
+        for (int i = 0; i < 3; i++) {
+            if (mUserCard.get(i) != null)
+                mUserCard.get(i).render(renderer);
+            if (mEnemyCard.get(i) != null)
+                mEnemyCard.get(i).render(renderer);
+        }
+        super.render(renderer);
     }
 
     public Control getUserFieldController() {
@@ -122,8 +134,16 @@ public class Field extends Renderable {
             return false;
         }
 
-        public void playCard(int slotNumber, MetaCard metaCard) {
+        public void playCard(int slotNumber, MetaCard metaCard, boolean user) {
             mSlots.set(slotNumber, new Card(metaCard));
+            Card ref = mSlots.get(slotNumber);
+            ref.setW(Field.this.getW()/3);
+            ref.setH(Field.this.getH()/2);
+            ref.setX(Field.this.getX() + Field.this.getW()/3 * slotNumber);
+            if (user)
+                ref.setY(Field.this.getY());
+            else
+                ref.setY(Field.this.getY() + Field.this.getH() / 2);
         }
 
 

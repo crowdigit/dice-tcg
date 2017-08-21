@@ -102,16 +102,18 @@ public class HandCard extends Touchable {
                 mY = controller.getRenderer().getScreenHeight() - event.getY();
                 return 1;
             case MotionEvent.ACTION_UP:
+                if (mPressed) {
+                    mPressed = false;
+                    mY = 0;
+                }
                 if (mMoving) {
                     mMoving = false;
                     int slot = controller.getFieldController().evalSlot(event.getX(), controller.getRenderer().getScreenHeight() - event.getY());
                     System.out.println("cost: " + mMetaCard.getSummonCost() + ", mana: " + controller.getCurrentMana());
                     if (slot != -1 && controller.getFieldController().slotAvailable(slot) && controller.getCurrentMana() >= mMetaCard.getSummonCost()) {
-                        controller.getFieldController().playCard(slot, mMetaCard);
+                        controller.getFieldController().playCard(slot, mMetaCard, true);
                         return 2;
                     }
-                    mY = 0;
-                    mPressed = false;
                     return 4;
                 }
                 break;

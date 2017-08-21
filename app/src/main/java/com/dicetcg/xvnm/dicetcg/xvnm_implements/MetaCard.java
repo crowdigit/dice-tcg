@@ -7,7 +7,7 @@ package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 public class MetaCard {
 
     public MetaCard(int diceLowerMax, int lowerDamage, int higherDamage,
-                int hp, int dp, int summonCost, int maintainCost) {
+                int hp, int dp, int summonCost, int maintainCost, String name) {
         mDiceLowerMax = diceLowerMax;
         mLowerDamage = lowerDamage;
         mHigherDamage = higherDamage;
@@ -15,6 +15,7 @@ public class MetaCard {
         mDP = dp;
         mSummonCost = summonCost;
         mMaintainCost = maintainCost;
+        mName = name;
     }
 
     public int evaluteDamage(int dice) {
@@ -39,6 +40,10 @@ public class MetaCard {
         return mMaintainCost;
     }
 
+    public String getName() {
+        return mName;
+    }
+
     private int mDiceLowerMax;
     private int mLowerDamage;
     private int mHigherDamage;
@@ -46,5 +51,6 @@ public class MetaCard {
     private int mDP;
     private int mSummonCost;
     private int mMaintainCost;
+    private String mName;
 
 }

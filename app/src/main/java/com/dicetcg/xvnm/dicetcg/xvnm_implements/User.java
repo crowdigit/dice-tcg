@@ -4,8 +4,6 @@ import android.view.MotionEvent;
 
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 
-import java.util.Random;
-
 /**
  * Created by xvnm on 8/18/17.
  */
@@ -57,7 +55,6 @@ public class User extends Player {
                 if (f == 4)
                     mIsMovingCard = false;
             }
-
 
             if (!mIsMovingCard) {
                 mEndTurnButton.onTouch(event, mController);

@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
         AddCard();           //나중에 DB 불러왔을 때 DB가 비었다면 그 때만 실행하는 방향으로
 
+        getRenderer().registerTextureNames(mMetaCards);
+
         if (android.os.Build.VERSION.SDK_INT >= 11)
             mGLView.setPreserveEGLContextOnPause(true);
 
@@ -196,7 +198,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         Toast.makeText(this, "데이터 저장 완료", Toast.LENGTH_SHORT).show();
     }
 
-
     public void ReadCard(){
         String select_data;
         select_data = "select * from myCardDB;";
@@ -207,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         mMetaCards = new ArrayList<>(30);
 
         while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex("CardName"));  // Not used actually
+            String name = cursor.getString(cursor.getColumnIndex("CardName"));
             int HP = cursor.getInt(cursor.getColumnIndex("HP"));
             int AC = cursor.getInt(cursor.getColumnIndex("AC"));
             int summonCost = cursor.getInt(cursor.getColumnIndex("SC"));
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             mMetaCards.add(new MetaCard(
                     diceBottomMax, diceBottomDamage, diceTopDamage,
-                    HP, AC, summonCost, maintainCost
+                    HP, AC, summonCost, maintainCost, name
             ));
         }
 

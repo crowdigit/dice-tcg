@@ -72,9 +72,15 @@ public class GameUI extends Renderable implements UI {
                 boolean attack = true; // TODO random
 
                 while (mUser.getHP() >= 0 || mEnemy.getHP() >= 0) {
-                    mUser.enableControl();
-                    mUser.takeTurn(mField.getUserFieldController(), attack);
-                    mEnemy.takeTurn(mField.getEnemyFieldController(), !attack);
+                    if (attack) {
+                        mUser.enableControl();
+                        mUser.takeTurn(mField.getUserFieldController(), attack);
+                        mEnemy.takeTurn(mField.getEnemyFieldController(), attack);
+                    } else {
+                        mEnemy.takeTurn(mField.getEnemyFieldController(), attack);
+                        mUser.enableControl();
+                        mUser.takeTurn(mField.getUserFieldController(), attack);
+                    }
                     attack = !attack;
                 }
             }
@@ -135,9 +141,6 @@ public class GameUI extends Renderable implements UI {
     }
 
     protected abstract class GameUIController {
-
-        void awaitSelection() {
-        }
 
         ArrayList<MetaCard> getMetaCards() {
             return mActivity.getMetaCards();

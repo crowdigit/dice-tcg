@@ -11,6 +11,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.dicetcg.xvnm.dicetcg.R;
+import com.dicetcg.xvnm.dicetcg.xvnm_implements.MetaCard;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +41,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
             0.0f, 0.0f, 0.0f, 1.0f,
     };
     private ArrayList<Integer> mTextureIDs;
+    private LinkedList<String> mTextureNames;
     private ArrayList<Shader> mPrograms;
     private Resources mResources;
     private String mPackageName;
@@ -74,7 +76,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         mVBO = createVertexArray();
 
-        mTextureIDs.add(loadTexture("test"));
+        // for (String textureName : mTextureNames)
+            //mTextureIDs.add(loadTexture(textureName));
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -241,6 +244,12 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     public void setFade(float fade) {
         mFade = fade;
+    }
+
+    public void registerTextureNames(List<MetaCard> textureNames) {
+        mTextureNames = new LinkedList<>();
+        for (MetaCard m : textureNames)
+            mTextureNames.add(m.getName());
     }
 
 }
