@@ -20,6 +20,8 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -40,11 +42,12 @@ public class GLRenderer implements GLSurfaceView.Renderer {
             0.0f, 0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 0.0f, 1.0f,
     };
-    private ArrayList<Integer> mTextureIDs;
+    private Map<String, Integer> mTextures;
     private LinkedList<String> mTextureNames;
     private ArrayList<Shader> mPrograms;
     private Resources mResources;
     private String mPackageName;
+    private float mFade;
 
     public GLRenderer(Context context) {
         mResources = context.getResources();
@@ -52,7 +55,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         mRenderablesQueue = new LinkedList<>();
         mPackageName = context.getPackageName();
         mPrograms = new ArrayList<>();
-        mTextureIDs = new ArrayList<>();
+        mTextures = new TreeMap<>();
         mFade = 1.0f;
     }
 
@@ -76,10 +79,13 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         mVBO = createVertexArray();
 
-        // for (String textureName : mTextureNames)
-            //mTextureIDs.add(loadTexture(textureName));
+        for (String textureName : mTextureNames)
+            mTextures.put(textureName, loadTexture(textureName));
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        GLES20.glDepthFunc(GLES20.GL_LEQUAL);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glClearDepthf(1.0f);
     }
@@ -227,16 +233,14 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         return (TextureShader)mPrograms.get(0);
     }
 
-    public int getTexture(int index) {
-        return mTextureIDs.get(index);
+    public int getTexture(String key) {
+        return mTextures.get(key);
     }
 
     public void clearRenderables() {
         mRenderables.clear();
         mRenderablesQueue.clear();
     }
-
-    private float mFade;
 
     public float getFade() {
         return mFade;

@@ -8,8 +8,10 @@ import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
 public class Card extends Renderable {
 
-    public Card(MetaCard meta) {
+    public Card(MetaCard meta, int texID) {
         mMeta = meta;
+        renderTexture(true);
+        setTexture(texID);
     }
 
     @Override

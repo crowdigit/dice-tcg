@@ -15,17 +15,13 @@ import com.dicetcg.xvnm.dicetcg.xvnm_implements.MetaCard;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.UI;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     private UI mCurrentUI;
     private ArrayList<UI> mUIs;
     private GLView mGLView;
-
-    CardDBHandler myCardDB;
-
+    private CardDBHandler myCardDB;
     private ArrayList<MetaCard> mMetaCards;
 
     @Override
@@ -50,22 +46,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         if (android.os.Build.VERSION.SDK_INT >= 11)
             mGLView.setPreserveEGLContextOnPause(true);
-
     }
 
     public void DBNull(){
-
         SQLiteDatabase db = myCardDB.getWritableDatabase();;
         String count = "SELECT count (*) FROM myCardDB";
         Cursor mcursor = db.rawQuery(count, null);
         mcursor.moveToFirst();
         int icount = mcursor.getInt(0);
         if (icount == 0) AddCard();
-
-    }
-
-    public GLRenderer getRenderer() {
-        return mGLView.getRenderer();
     }
 
     public void AddCard(){
@@ -247,6 +236,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public ArrayList<MetaCard> getMetaCards() {
         return mMetaCards;
+    }
+
+    public GLRenderer getRenderer() {
+        return mGLView.getRenderer();
     }
 
 }

@@ -12,6 +12,8 @@ import java.util.Random;
 
 public class HandCard extends Touchable {
 
+    final float mag = 2.0f;
+
     public HandCard(MetaCard metaCard, GLRenderer renderer) {
         mMetaCard = metaCard;
         mW = ((float)renderer.getScreenWidth()/100) * 17;
@@ -27,6 +29,9 @@ public class HandCard extends Touchable {
 
         mPressed = false;
         mMoving = false;
+
+        renderTexture(true);
+        setTexture(renderer.getTexture(metaCard.getName()));
     }
 
     public void render(int total, int index, GLRenderer renderer) {
@@ -40,7 +45,7 @@ public class HandCard extends Touchable {
 
     @Override
     public float getX() {
-        return mPressed ? mX - 0.35f * mW : mX;
+        return mX;
     }
 
     @Override
@@ -55,12 +60,12 @@ public class HandCard extends Touchable {
 
     @Override
     public float getW() {
-        return mPressed ? mW * 1.7f : mW ;
+        return mPressed ? mW * mag : mW ;
     }
 
     @Override
     public float getH() {
-        return mPressed ? mH * 1.7f : mH;
+        return mPressed ? mH * mag : mH;
     }
 
     @Override
@@ -98,7 +103,7 @@ public class HandCard extends Touchable {
                 if (!mPressed)
                     break;
                 mMoving = true;
-                mX = event.getX() - 0.35f * mW;
+                mX = event.getX() - mag / 2 * mW;
                 mY = controller.getRenderer().getScreenHeight() - event.getY();
                 return 1;
             case MotionEvent.ACTION_UP:
@@ -109,18 +114,22 @@ public class HandCard extends Touchable {
                 if (mMoving) {
                     mMoving = false;
                     int slot = controller.getFieldController().evalSlot(event.getX(), controller.getRenderer().getScreenHeight() - event.getY());
-                    System.out.println("cost: " + mMetaCard.getSummonCost() + ", mana: " + controller.getCurrentMana());
+                    System.out.println("cost: " + mMetaCard.getSummonCost() + ", mana: " + controller.getCurrentMana());    // TODO Render cost
                     if (slot != -1 && controller.getFieldController().slotAvailable(slot) && controller.getCurrentMana() >= mMetaCard.getSummonCost()) {
                         controller.getFieldController().playCard(slot, mMetaCard, true);
                         return 2;
                     }
-                    return 4;
+                    return 3;
                 }
                 break;
             default:
         }
 
         return 0;
+    }
+
+    public boolean isPressed() {
+        return mPressed;
     }
 
     private MetaCard mMetaCard;

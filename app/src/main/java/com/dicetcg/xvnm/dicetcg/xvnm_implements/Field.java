@@ -11,6 +11,13 @@ import java.util.ArrayList;
 
 public class Field extends Renderable {
 
+    private ArrayList<Card> mUserCard;
+    private ArrayList<Card> mEnemyCard;
+    private float mW, mH;
+    private float mX, mY;
+    private GameUI.GameUIController mController;
+    private Control mUserController, mEnemyController;
+
     public Field(GameUI.GameUIController controller) {
         mUserCard = new ArrayList<>(3);
         mUserCard.add(null);
@@ -39,14 +46,6 @@ public class Field extends Renderable {
                 mEnemyCard.get(i).render(renderer);
         }
         super.render(renderer);
-    }
-
-    public Control getUserFieldController() {
-        return mUserController;
-    }
-
-    public Control getEnemyFieldController() {
-        return mEnemyController;
     }
 
     protected class Control {
@@ -135,7 +134,7 @@ public class Field extends Renderable {
         }
 
         public void playCard(int slotNumber, MetaCard metaCard, boolean user) {
-            mSlots.set(slotNumber, new Card(metaCard));
+            mSlots.set(slotNumber, new Card(metaCard, mController.getRenderer().getTexture(metaCard.getName())));
             Card ref = mSlots.get(slotNumber);
             ref.setW(Field.this.getW()/3);
             ref.setH(Field.this.getH()/2);
@@ -176,6 +175,14 @@ public class Field extends Renderable {
 
     }
 
+    public Control getUserFieldController() {
+        return mUserController;
+    }
+
+    public Control getEnemyFieldController() {
+        return mEnemyController;
+    }
+
     @Override
     public float getX() {
         return mX;
@@ -205,12 +212,5 @@ public class Field extends Renderable {
     public float getB() {
         return 0.5f;
     }
-
-    private ArrayList<Card> mUserCard;
-    private ArrayList<Card> mEnemyCard;
-    private float mW, mH;
-    private float mX, mY;
-    private GameUI.GameUIController mController;
-    private Control mUserController, mEnemyController;
 
 }

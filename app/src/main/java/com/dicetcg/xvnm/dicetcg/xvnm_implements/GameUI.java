@@ -81,6 +81,7 @@ public class GameUI extends Renderable implements UI {
                         mUser.enableControl();
                         mUser.takeTurn(mField.getUserFieldController(), attack);
                     }
+                    // combat
                     attack = !attack;
                 }
             }

@@ -23,7 +23,7 @@ public class MetaCard {
         mMaintainCost = maintainCost;
     }
 
-    public int evaluteDamage(int dice) {
+    public int evalDamage(int dice) {
         if (dice > mDiceLowerMax)
             return mHigherDamage;
         return mLowerDamage;

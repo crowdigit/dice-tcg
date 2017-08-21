@@ -61,7 +61,7 @@ public class Renderable {
         if (mRenderTexture) {
             s = renderer.getTextureProgram();
             s.use();
-            ((TextureShader)s).bindTexture(renderer.getTexture(getTexture()));
+            ((TextureShader)s).bindTexture(getTexture());
         } else {
             s = renderer.getColorProgram();
             s.use();

@@ -20,7 +20,7 @@ public class User extends Player {
     @Override
     public void takeTurn(Field.Control field, boolean attack) {
         super.takeTurn(field, attack);
-        System.out.println("M: " + getManaMax() + ", m: " + getMana());
+        System.out.println("M: " + getManaMax() + ", m: " + getMana()); // TODO render mana
         while (isControlEnabled()) {
             // wait for user to end their turn
         }
@@ -29,8 +29,18 @@ public class User extends Player {
     @Override
     public void render(GLRenderer renderer) {
         int index = 0;
-        for (HandCard card : mHand)
-            card.render(mHand.size(), index++, renderer);
+        HandCard selected = null;
+        int idx = -1;
+        for (HandCard card : mHand) {
+            if (!card.isPressed())
+                card.render(mHand.size(), index++, renderer);
+            else {
+                selected = card;
+                idx = index++;
+            }
+        }
+        if (selected != null)
+            selected.render(mHand.size(), idx, renderer);
         mEndTurnButton.render(renderer);
     }
 
@@ -41,26 +51,23 @@ public class User extends Player {
 
             for (int i = 0; i < mHand.size(); i++) {
                 int f = mHand.get(i).onTouch(event, mController);
-                if ((f & 1) == 1) {
+                if (f == 1) {
                     r = true;
                     mIsMovingCard = true;
                 }
-
-                if ((f & 2) == 2) {
+                else if (f == 2) {
                     subMana(mHand.get(i).getMetaCard().getSummonCost());
                     mHand.remove(i);
                     mIsMovingCard = false;
                 }
-
-                if (f == 4)
+                else if (f == 3)
                     mIsMovingCard = false;
             }
 
             if (!mIsMovingCard) {
                 mEndTurnButton.onTouch(event, mController);
-                if (mEndTurnButton.isTurnEnded()) {
+                if (mEndTurnButton.isTurnEnded())
                     mControlEnabled = false;
-                }
                 if (mEndTurnButton.isButtonPressed())
                     return true;
             }
