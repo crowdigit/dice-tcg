@@ -39,7 +39,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
             0.0f, 0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 0.0f, 1.0f,
     };
-    private LinkedList<String> mTextureNames;
     private ArrayList<Integer> mTextureIDs;
     private ArrayList<Shader> mPrograms;
     private Resources mResources;
@@ -50,7 +49,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         mRenderables = new LinkedList<>();
         mRenderablesQueue = new LinkedList<>();
         mPackageName = context.getPackageName();
-        // mTextureNames TODO
         mPrograms = new ArrayList<>();
         mTextureIDs = new ArrayList<>();
         mFade = 1.0f;

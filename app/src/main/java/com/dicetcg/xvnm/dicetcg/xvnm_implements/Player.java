@@ -1,8 +1,9 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
+import android.view.MotionEvent;
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by xvnm on 8/17/17.
@@ -12,8 +13,8 @@ abstract public class Player {
 
     Player(GameUI.GameUIController controller) {
         mDeck = new Deck(controller.getMetaCards());
-        mHand = new MetaCard[5];
-        mHandCount = 0;
+        mHand = new LinkedList<>();
+        mController = controller;
     }
 
     public int getHP() {
@@ -25,21 +26,40 @@ abstract public class Player {
     }
 
     protected void draw() {
-        for (int i = mHandCount; i < 5; i++) {
+        for (int i = mHand.size(); i < 5; i++) {
             if (mDeck.getCardCount() > 0) {
-                mHand[mHandCount] = mDeck.draw();
+                mHand.add(new HandCard(mDeck.draw(), mController.getRenderer()));
             } else {
                 setHP(getHP() - 500);
             }
         }
     }
 
-    abstract public void takeTurn(Field.Control field, boolean attack);
+    public int getMana() {
+        return mMana;
+    }
+
+    public void subMana(int m) {
+        mMana -= m;
+    }
+
+    public int getManaMax() {
+        return mManaMax;
+    }
+
+    public void takeTurn(Field.Control field, boolean attack) {
+        if (mManaMax < 10)
+            mManaMax++;
+        mMana = mManaMax;
+    }
+
+    abstract public void render(GLRenderer renderer);
+    abstract public boolean onTouch(MotionEvent event);
 
     private int mHP;
-    private int mMaxCost, mCost;
+    private int mManaMax, mMana;
     private Deck mDeck;
-    protected MetaCard[]mHand;
-    protected int mHandCount;
+    protected GameUI.GameUIController mController;
+    protected LinkedList<HandCard> mHand;
 
 }

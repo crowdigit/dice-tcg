@@ -1,13 +1,11 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
-import android.text.LoginFilter;
 import android.view.MotionEvent;
 
 import com.dicetcg.xvnm.dicetcg.MainActivity;
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -29,14 +27,14 @@ public class GameUI extends Renderable implements UI {
         mFader = new Fader();
         mFader.start(500, false);
 
-        mField = new Field();
-
-        boolean attack = true; // TODO random
-
         GameUIController userController = new GameUIController() {
             @Override
             Field.Control getFieldController() {
                 return mField.getUserFieldController();
+            }
+            @Override
+            int getCurrentMana() {
+                return mUser.getMana();
             }
         };
 
@@ -45,16 +43,43 @@ public class GameUI extends Renderable implements UI {
             Field.Control getFieldController() {
                 return mField.getEnemyFieldController();
             }
+            @Override
+            int getCurrentMana() {
+                return mEnemy.getMana();
+            }
         };
 
+        mController = new GameUIController() {
+            @Override
+            Field.Control getFieldController() {
+                return null;
+            }
+            @Override
+            int getCurrentMana() {
+                return 0;
+            }
+        };
+
+        mField = new Field(mController);
         mUser = new User(userController);
         mEnemy = new Enemy(enemyController);
 
-        while (mUser.getHP() >= 0 || mEnemy.getHP() >= 0) {
-            mUser.takeTurn(mField.getUserFieldController(), attack);
-            mEnemy.takeTurn(mField.getEnemyFieldController(), !attack);
-            attack = !attack;
-        }
+        mUser.draw();
+        mEnemy.draw();
+
+        Thread game = new Thread(new Runnable() {
+            public void run() {
+                boolean attack = true; // TODO random
+
+                while (mUser.getHP() >= 0 || mEnemy.getHP() >= 0) {
+                    mUser.enableControl();
+                    mUser.takeTurn(mField.getUserFieldController(), attack);
+                    mEnemy.takeTurn(mField.getEnemyFieldController(), !attack);
+                    attack = !attack;
+                }
+            }
+        });
+        game.start();
 
     }
 
@@ -73,7 +98,7 @@ public class GameUI extends Renderable implements UI {
 
     @Override
     public boolean onTouch(MotionEvent event) {
-        return false;
+        return mUser.onTouch(event);
     }
 
     @Override
@@ -104,6 +129,9 @@ public class GameUI extends Renderable implements UI {
             if (!mFader.isActive())
                 mFader = null;
         }
+        mField.render(renderer);
+        mUser.render(renderer);
+        mEnemy.render(renderer);
     }
 
     protected abstract class GameUIController {
@@ -115,14 +143,21 @@ public class GameUI extends Renderable implements UI {
             return mActivity.getMetaCards();
         }
 
+        GLRenderer getRenderer() {
+            return mActivity.getRenderer();
+        }
+
         abstract Field.Control getFieldController();
+        abstract int getCurrentMana();
 
     }
 
     private MainActivity mActivity;
     private int mW, mH;
     private Fader mFader;
-    private Player mUser, mEnemy;
+    private User mUser;
+    private Enemy mEnemy;
     private Field mField;
+    private GameUIController mController;
 
 }

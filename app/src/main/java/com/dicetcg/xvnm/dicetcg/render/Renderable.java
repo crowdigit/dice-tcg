@@ -7,7 +7,7 @@ import android.opengl.Matrix;
  * Created by xvnm on 8/15/17.
  */
 
-public abstract class Renderable {
+public class Renderable {
 
     public float getX() {
         return 0;
