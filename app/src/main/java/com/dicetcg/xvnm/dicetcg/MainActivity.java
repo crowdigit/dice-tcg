@@ -44,10 +44,21 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         mCurrentUI.start();
 
         myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
-        AddCard();           //나중에 DB 불러왔을 때 DB가 비었다면 그 때만 실행하는 방향으로
+        DBNull();
 
         if (android.os.Build.VERSION.SDK_INT >= 11)
             mGLView.setPreserveEGLContextOnPause(true);
+
+    }
+
+    public void DBNull(){
+
+        SQLiteDatabase db = myCardDB.getWritableDatabase();;
+        String count = "SELECT count (*) FROM myCardDB";
+        Cursor mcursor = db.rawQuery(count, null);
+        mcursor.moveToFirst();
+        int icount = mcursor.getInt(0);
+        if (icount == 0) AddCard();
 
     }
 
@@ -216,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             int diceBottomDamage = cursor.getInt(cursor.getColumnIndex("DiceBottom"));
             int diceBottomMax = cursor.getInt(cursor.getColumnIndex("DiceMax"));
 
-            mMetaCards.add(new MetaCard(
+            mMetaCards.add(new MetaCard(name,
                     diceBottomMax, diceBottomDamage, diceTopDamage,
                     HP, AC, summonCost, maintainCost
             ));
