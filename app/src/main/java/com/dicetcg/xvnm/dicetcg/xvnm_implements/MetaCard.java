@@ -1,13 +1,19 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
+import android.os.Handler;
+import android.os.Message;
+
+import com.dicetcg.xvnm.dicetcg.R;
+
 /**
  * Created by xvnm on 8/17/17.
  */
 
 public class MetaCard {
 
-    public MetaCard(int diceLowerMax, int lowerDamage, int higherDamage,
-                int hp, int dp, int summonCost, int maintainCost, String name) {
+    public MetaCard(String name, int diceLowerMax, int lowerDamage, int higherDamage,
+                int hp, int dp, int summonCost, int maintainCost) {
+        mName = name;
         mDiceLowerMax = diceLowerMax;
         mLowerDamage = lowerDamage;
         mHigherDamage = higherDamage;
@@ -15,7 +21,6 @@ public class MetaCard {
         mDP = dp;
         mSummonCost = summonCost;
         mMaintainCost = maintainCost;
-        mName = name;
     }
 
     public int evaluteDamage(int dice) {
@@ -44,6 +49,7 @@ public class MetaCard {
         return mName;
     }
 
+    private String mName;
     private int mDiceLowerMax;
     private int mLowerDamage;
     private int mHigherDamage;
@@ -51,6 +57,5 @@ public class MetaCard {
     private int mDP;
     private int mSummonCost;
     private int mMaintainCost;
-    private String mName;
 
 }
