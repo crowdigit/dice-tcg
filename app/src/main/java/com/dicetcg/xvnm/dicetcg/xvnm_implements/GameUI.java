@@ -71,18 +71,28 @@ public class GameUI extends Renderable implements UI {
             public void run() {
                 boolean attack = true; // TODO random
 
-                while (mUser.getHP() >= 0 || mEnemy.getHP() >= 0) {
+                // while (mUser.getHP() > 0 && mEnemy.getHP() > 0) { TODO
+                while (true) {
                     if (attack) {
+                        System.out.println("player attacks");
                         mUser.enableControl();
                         mUser.takeTurn(mField.getUserFieldController(), attack);
                         mEnemy.takeTurn(mField.getEnemyFieldController(), attack);
                     } else {
+                        System.out.println("enemy attacks");
                         mEnemy.takeTurn(mField.getEnemyFieldController(), attack);
                         mUser.enableControl();
                         mUser.takeTurn(mField.getUserFieldController(), attack);
                     }
-                    // combat
+                    mPopup = new Popup(1000, 1);
+                    while (!mPopup.done()) {
+                    }
+                    System.out.println("poped up");
+                    mPopup = null;
+                    mField.combat(attack);
                     attack = !attack;
+                    System.out.println("P: " + mUser.getHP() + ", E: " + mEnemy.getHP());
+                    System.out.println("turn");
                 }
             }
         });
@@ -139,6 +149,8 @@ public class GameUI extends Renderable implements UI {
         mField.render(renderer);
         mUser.render(renderer);
         mEnemy.render(renderer);
+        if (mPopup != null)
+            mPopup.render(renderer);
     }
 
     protected abstract class GameUIController {
@@ -149,6 +161,13 @@ public class GameUI extends Renderable implements UI {
 
         GLRenderer getRenderer() {
             return mActivity.getRenderer();
+        }
+
+        public void deal(boolean attack, int damage) {
+            if (attack)
+                mEnemy.setHP(mEnemy.getHP() - damage);
+            else
+                mUser.setHP(mUser.getHP() - damage);
         }
 
         abstract Field.Control getFieldController();
@@ -163,5 +182,6 @@ public class GameUI extends Renderable implements UI {
     private Enemy mEnemy;
     private Field mField;
     private GameUIController mController;
+    private Popup mPopup;
 
 }

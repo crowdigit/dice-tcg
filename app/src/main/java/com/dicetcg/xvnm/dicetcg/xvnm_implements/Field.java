@@ -4,6 +4,7 @@ import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by xvnm on 8/18/17.
@@ -173,6 +174,42 @@ public class Field extends Renderable {
         private ArrayList<Card> mSlots;
         private ArrayList<Touchable> mSlotHitboxes;
 
+    }
+
+    public void combat(boolean attack) {
+        ArrayList<Card> attackerCard, defenderCard;
+        if (attack) {
+            attackerCard = mUserCard;
+            defenderCard = mEnemyCard;
+        } else {
+            attackerCard = mEnemyCard;
+            defenderCard = mUserCard;
+        }
+
+        // TODO Show dice animation
+
+        int dice = (new Random()).nextInt(5) + 1;
+
+        for (int i = 0; i < 3; i++) {
+            if (attackerCard.get(i) != null) {
+                Card attacker = attackerCard.get(i);
+                Card oppo = defenderCard.get(i);
+                int damage = attacker.getMetaCard().evalDamage(dice);
+                if (oppo == null) {
+                    attacker.attack(true, attack, mController.getRenderer().getScreenHeight());
+                    while (attacker.isAttacking()) {
+                    }
+                    mController.deal(attack, damage);
+                } else {
+                    attacker.attack(false, attack, 0);
+                    while (attacker.isAttacking()) {
+                    }
+                    oppo.setHP(oppo.getHP() - damage);
+                    if (oppo.getHP() <= 0)
+                        defenderCard.set(i, null);
+                }
+            }
+        }
     }
 
     public Control getUserFieldController() {

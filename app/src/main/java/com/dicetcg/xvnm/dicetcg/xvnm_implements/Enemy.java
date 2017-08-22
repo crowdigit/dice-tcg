@@ -17,20 +17,23 @@ public class Enemy extends Player {
     @Override
     public void takeTurn(Field.Control field, boolean attack) {
         // TODO implement enemy AI
-        for (int i = 0; i < 3; i++)
-            if (field.slotAvailable(i)) {
-                field.playCard(i, mHand.get(0).getMetaCard(), false);
-                mHand.remove(0);
-                break;
-            }
+        if (mHand.size() > 0)
+            for (int i = 0; i < 3; i++)
+                if (field.slotAvailable(i)) {
+                    field.playCard(i, mHand.get(0).getMetaCard(), false);
+                    mHand.remove(0);
+                    break;
+                }
     }
 
     @Override
     public void render(GLRenderer renderer) {
         int index = 0;
-        for (HandCard card : mHand) {
-            card.setY(renderer.getScreenHeight() - card.getH());
-            card.render(mHand.size(), index++, renderer);
+        synchronized (mHand) {
+            for (HandCard card : mHand) {
+                card.setY(renderer.getScreenHeight() - card.getH());
+                card.render(mHand.size(), index++, renderer);
+            }
         }
     }
 
