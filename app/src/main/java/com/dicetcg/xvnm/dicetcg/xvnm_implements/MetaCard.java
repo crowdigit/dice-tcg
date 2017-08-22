@@ -21,10 +21,9 @@ public class MetaCard {
         mDP = dp;
         mSummonCost = summonCost;
         mMaintainCost = maintainCost;
-
     }
 
-    public int evaluteDamage(int dice) {
+    public int evalDamage(int dice) {
         if (dice > mDiceLowerMax)
             return mHigherDamage;
         return mLowerDamage;
@@ -44,6 +43,10 @@ public class MetaCard {
 
     public int getMaintainCost() {
         return mMaintainCost;
+    }
+
+    public String getName() {
+        return mName;
     }
 
     private String mName;

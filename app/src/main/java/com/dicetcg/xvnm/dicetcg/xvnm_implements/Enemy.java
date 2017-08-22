@@ -4,8 +4,6 @@ import android.view.MotionEvent;
 
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 
-import java.util.ArrayList;
-
 /**
  * Created by xvnm on 8/18/17.
  */
@@ -18,15 +16,24 @@ public class Enemy extends Player {
 
     @Override
     public void takeTurn(Field.Control field, boolean attack) {
-        draw();
+        // TODO implement enemy AI
+        if (mHand.size() > 0)
+            for (int i = 0; i < 3; i++)
+                if (field.slotAvailable(i)) {
+                    field.playCard(i, mHand.get(0).getMetaCard(), false);
+                    mHand.remove(0);
+                    break;
+                }
     }
 
     @Override
     public void render(GLRenderer renderer) {
         int index = 0;
-        for (HandCard card : mHand) {
-            card.setY(renderer.getScreenHeight() - card.getH());
-            card.render(mHand.size(), index++, renderer);
+        synchronized (mHand) {
+            for (HandCard card : mHand) {
+                card.setY(renderer.getScreenHeight() - card.getH());
+                card.render(mHand.size(), index++, renderer);
+            }
         }
     }
 

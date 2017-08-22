@@ -15,6 +15,7 @@ abstract public class Player {
         mDeck = new Deck(controller.getMetaCards());
         mHand = new LinkedList<>();
         mController = controller;
+        mHP = 500;
     }
 
     public int getHP() {

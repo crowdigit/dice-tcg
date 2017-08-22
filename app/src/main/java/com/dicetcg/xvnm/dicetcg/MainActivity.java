@@ -15,17 +15,13 @@ import com.dicetcg.xvnm.dicetcg.xvnm_implements.MetaCard;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.UI;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     private UI mCurrentUI;
     private ArrayList<UI> mUIs;
     private GLView mGLView;
-
-    CardDBHandler myCardDB;
-
+    private CardDBHandler myCardDB;
     private ArrayList<MetaCard> mMetaCards;
 
     @Override
@@ -45,14 +41,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         myCardDB = new CardDBHandler(this, "myCardDB.db", null, 1);
         DBNull();
+        ReadCard();
+        getRenderer().registerTextureNames(mMetaCards);
 
         if (android.os.Build.VERSION.SDK_INT >= 11)
             mGLView.setPreserveEGLContextOnPause(true);
-
     }
 
     public void DBNull(){
-
         SQLiteDatabase db = myCardDB.getWritableDatabase();;
         String count = "SELECT count (*) FROM myCardDB";
         Cursor mcursor = db.rawQuery(count, null);
@@ -61,10 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if (icount == 0) AddCard();
         else ReadCard();
 
-    }
-
-    public GLRenderer getRenderer() {
-        return mGLView.getRenderer();
     }
 
     public void AddCard(){
@@ -203,11 +195,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         db.close();
 
-        ReadCard();
-
         Toast.makeText(this, "데이터 저장 완료", Toast.LENGTH_SHORT).show();
     }
-
 
     public void ReadCard(){
         String select_data;
@@ -219,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         mMetaCards = new ArrayList<>(30);
 
         while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex("CardName"));  // Not used actually
+            String name = cursor.getString(cursor.getColumnIndex("CardName"));
             int HP = cursor.getInt(cursor.getColumnIndex("HP"));
             int AC = cursor.getInt(cursor.getColumnIndex("AC"));
             int summonCost = cursor.getInt(cursor.getColumnIndex("SC"));
@@ -249,6 +238,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public ArrayList<MetaCard> getMetaCards() {
         return mMetaCards;
+    }
+
+    public GLRenderer getRenderer() {
+        return mGLView.getRenderer();
     }
 
 }

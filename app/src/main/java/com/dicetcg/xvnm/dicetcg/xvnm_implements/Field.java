@@ -1,14 +1,23 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by xvnm on 8/18/17.
  */
 
 public class Field extends Renderable {
+
+    private ArrayList<Card> mUserCard;
+    private ArrayList<Card> mEnemyCard;
+    private float mW, mH;
+    private float mX, mY;
+    private GameUI.GameUIController mController;
+    private Control mUserController, mEnemyController;
 
     public Field(GameUI.GameUIController controller) {
         mUserCard = new ArrayList<>(3);
@@ -31,12 +40,15 @@ public class Field extends Renderable {
         mEnemyController = new Control(mEnemyCard);
     }
 
-    public Control getUserFieldController() {
-        return mUserController;
-    }
-
-    public Control getEnemyFieldController() {
-        return mEnemyController;
+    @Override
+    public void render(GLRenderer renderer) {
+        for (int i = 0; i < 3; i++) {
+            if (mUserCard.get(i) != null)
+                mUserCard.get(i).render(renderer);
+            if (mEnemyCard.get(i) != null)
+                mEnemyCard.get(i).render(renderer);
+        }
+        super.render(renderer);
     }
 
     protected class Control {
@@ -124,8 +136,16 @@ public class Field extends Renderable {
             return false;
         }
 
-        public void playCard(int slotNumber, MetaCard metaCard) {
-            mSlots.set(slotNumber, new Card(metaCard));
+        public void playCard(int slotNumber, MetaCard metaCard, boolean user) {
+            mSlots.set(slotNumber, new Card(metaCard, mController.getRenderer().getTexture(metaCard.getName())));
+            Card ref = mSlots.get(slotNumber);
+            ref.setW(Field.this.getW()/3);
+            ref.setH(Field.this.getH()/2);
+            ref.setX(Field.this.getX() + Field.this.getW()/3 * slotNumber);
+            if (user)
+                ref.setY(Field.this.getY());
+            else
+                ref.setY(Field.this.getY() + Field.this.getH() / 2);
         }
 
 
@@ -158,6 +178,50 @@ public class Field extends Renderable {
 
     }
 
+    public void combat(boolean attack) {
+        ArrayList<Card> attackerCard, defenderCard;
+        if (attack) {
+            attackerCard = mUserCard;
+            defenderCard = mEnemyCard;
+        } else {
+            attackerCard = mEnemyCard;
+            defenderCard = mUserCard;
+        }
+
+        // TODO Show dice animation
+
+        int dice = (new Random()).nextInt(5) + 1;
+
+        for (int i = 0; i < 3; i++) {
+            if (attackerCard.get(i) != null) {
+                Card attacker = attackerCard.get(i);
+                Card oppo = defenderCard.get(i);
+                int damage = attacker.getMetaCard().evalDamage(dice);
+                if (oppo == null) {
+                    attacker.attack(true, attack, mController.getRenderer().getScreenHeight());
+                    while (attacker.isAttacking()) {
+                    }
+                    mController.deal(attack, damage);
+                } else {
+                    attacker.attack(false, attack, 0);
+                    while (attacker.isAttacking()) {
+                    }
+                    oppo.setHP(oppo.getHP() - damage);
+                    if (oppo.getHP() <= 0)
+                        defenderCard.set(i, null);
+                }
+            }
+        }
+    }
+
+    public Control getUserFieldController() {
+        return mUserController;
+    }
+
+    public Control getEnemyFieldController() {
+        return mEnemyController;
+    }
+
     @Override
     public float getX() {
         return mX;
@@ -187,12 +251,5 @@ public class Field extends Renderable {
     public float getB() {
         return 0.5f;
     }
-
-    private ArrayList<Card> mUserCard;
-    private ArrayList<Card> mEnemyCard;
-    private float mW, mH;
-    private float mX, mY;
-    private GameUI.GameUIController mController;
-    private Control mUserController, mEnemyController;
 
 }
