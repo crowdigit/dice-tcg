@@ -15,10 +15,12 @@ public class Field extends Renderable {
         mUserCard.add(null);
         mUserCard.add(null);
         mUserCard.add(null);
+
         mEnemyCard = new ArrayList<>(3);
         mEnemyCard.add(null);
         mEnemyCard.add(null);
         mEnemyCard.add(null);
+
         mW = controller.getRenderer().getScreenWidth() / 6 * 5;
         mH = mW / 9 * 8;
         mX = (controller.getRenderer().getScreenWidth() - mW) / 2;

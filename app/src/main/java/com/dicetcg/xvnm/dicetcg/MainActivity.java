@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         mcursor.moveToFirst();
         int icount = mcursor.getInt(0);
         if (icount == 0) AddCard();
+        else ReadCard();
 
     }
 
