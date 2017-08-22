@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DiceTCG.iml" filepath="$PROJECT_DIR$/DiceTCG.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dice-tcg.iml" filepath="$PROJECT_DIR$/dice-tcg.iml" />
     </modules>
   </component>
 </project>
