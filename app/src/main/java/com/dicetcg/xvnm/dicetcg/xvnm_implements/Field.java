@@ -18,6 +18,7 @@ public class Field extends Renderable {
     private float mX, mY;
     private GameUI.GameUIController mController;
     private Control mUserController, mEnemyController;
+    private Dice mDice;
 
     public Field(GameUI.GameUIController controller) {
         mUserCard = new ArrayList<>(3);
@@ -38,6 +39,9 @@ public class Field extends Renderable {
 
         mUserController = new Control(mUserCard);
         mEnemyController = new Control(mEnemyCard);
+
+        mDice = new Dice();
+        mDice.renderTexture(false);
     }
 
     @Override
@@ -48,6 +52,7 @@ public class Field extends Renderable {
             if (mEnemyCard.get(i) != null)
                 mEnemyCard.get(i).render(renderer);
         }
+        mDice.render(renderer);
         super.render(renderer);
     }
 
@@ -196,7 +201,10 @@ public class Field extends Renderable {
             if (attackerCard.get(i) != null) {
                 Card attacker = attackerCard.get(i);
                 Card oppo = defenderCard.get(i);
-                int damage = attacker.getMetaCard().evalDamage(dice);
+                mDice.roll(mController.getRenderer().getScreenWidth());
+                while (mDice.isRolling() != 0) {
+                }
+                int damage = attacker.getMetaCard().evalDamage(mDice.getNumber());
                 if (oppo == null) {
                     attacker.attack(true, attack, mController.getRenderer().getScreenHeight());
                     while (attacker.isAttacking()) {

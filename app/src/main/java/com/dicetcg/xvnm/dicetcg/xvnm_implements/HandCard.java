@@ -128,6 +128,15 @@ public class HandCard extends Touchable {
         return 0;
     }
 
+    @Override
+    public float getRotate() {
+        return mRotate;
+    }
+
+    public void setRotate(float rotate) {
+        mRotate = rotate;
+    }
+
     public boolean isPressed() {
         return mPressed;
     }
@@ -137,5 +146,6 @@ public class HandCard extends Touchable {
     private float mR, mG, mB;
     private float mX, mY;
     private boolean mPressed, mMoving;
+    private float mRotate;
 
 }

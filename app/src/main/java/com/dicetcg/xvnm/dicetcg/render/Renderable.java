@@ -39,6 +39,8 @@ public class Renderable {
         return 0;
     }
 
+    public float getRotate() { return 0; }
+
     private int mTexID = -1;
     private boolean mRenderTexture = false;
 
@@ -68,12 +70,17 @@ public class Renderable {
             ((ColorShader)s).uniformColor(getR(), getG(), getB());
         }
 
-        float[]mat = new float[16];
-        Matrix.setIdentityM(mat, 0);
-        Matrix.translateM(mat, 0, getX(), getY(), getZ());
-        Matrix.scaleM(mat, 0, getW(), getH(), 1.0f);
-        Matrix.multiplyMM(mat, 0, renderer.getOrtho(), 0, mat, 0);
-        s.uniformMatrix(mat);
+        float[]st = new float[16];
+        float[]vm = new float[16];
+        Matrix.setIdentityM(st, 0);
+        Matrix.setIdentityM(vm, 0);
+        Matrix.translateM(st, 0, getX(), getY(), getZ());
+        Matrix.translateM(st, 0, getW()/2, getH()/2, 0);
+        Matrix.rotateM(st, 0, getRotate(), 0, 0, 1);
+        Matrix.translateM(st, 0, -getW()/2, -getH()/2, 0);
+        Matrix.scaleM(st, 0, getW(), getH(), 1.0f);
+        Matrix.multiplyMM(vm, 0, renderer.getOrtho(), 0, st, 0);
+        s.uniformMatrix(vm);
         s.uniformFade(renderer.getFade());
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);

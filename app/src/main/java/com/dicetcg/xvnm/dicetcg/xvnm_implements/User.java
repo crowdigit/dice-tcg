@@ -31,14 +31,12 @@ public class User extends Player {
         int index = 0;
         HandCard selected = null;
         int idx = -1;
-        synchronized (mHand) {
-            for (HandCard card : mHand) {
-                if (!card.isPressed())
-                    card.render(mHand.size(), index++, renderer);
-                else {
-                    selected = card;
-                    idx = index++;
-                }
+        for (HandCard card : mHand) {
+            if (!card.isPressed())
+                card.render(mHand.size(), index++, renderer);
+            else {
+                selected = card;
+                idx = index++;
             }
         }
         if (selected != null)

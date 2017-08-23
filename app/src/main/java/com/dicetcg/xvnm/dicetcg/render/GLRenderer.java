@@ -81,6 +81,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         for (String textureName : mTextureNames)
             mTextures.put(textureName, loadTexture(textureName));
+        mTextures.put("behind", loadTexture("behind"));
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glEnable(GLES20.GL_BLEND);
@@ -102,8 +103,11 @@ public class GLRenderer implements GLSurfaceView.Renderer {
             mRenderablesQueue.clear();
         }
 
-        for (Renderable r : mRenderables)
-            r.render(this);
+        for (Renderable r : mRenderables) {
+            synchronized (r) {
+                r.render(this);
+            }
+        }
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }

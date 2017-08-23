@@ -1,6 +1,7 @@
 package com.dicetcg.xvnm.dicetcg.render;
 
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 import java.nio.FloatBuffer;
 

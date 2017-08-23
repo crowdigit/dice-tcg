@@ -1,5 +1,6 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
+import android.opengl.Matrix;
 import android.view.MotionEvent;
 
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
@@ -24,14 +25,18 @@ public class Enemy extends Player {
                     mHand.remove(0);
                     break;
                 }
-    }
+   }
 
     @Override
     public void render(GLRenderer renderer) {
         int index = 0;
-        synchronized (mHand) {
-            for (HandCard card : mHand) {
+        int behindTex = renderer.getTexture("behind");
+
+        for (HandCard card : mHand) {
+            synchronized (card) {
+                card.setRotate(180);
                 card.setY(renderer.getScreenHeight() - card.getH());
+                card.setTexture(behindTex);
                 card.render(mHand.size(), index++, renderer);
             }
         }
