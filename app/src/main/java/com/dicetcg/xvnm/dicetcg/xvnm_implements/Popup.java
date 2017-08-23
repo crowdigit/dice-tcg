@@ -1,5 +1,6 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
 import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
 /**
@@ -15,10 +16,41 @@ public class Popup extends Renderable {
         mDuration = duration;
     }
 
-    public void render() {
-        while (!done()) {
+    @Override
+    public void render(GLRenderer renderer) {
+        mW = renderer.getScreenWidth();
+        mX = 0;
+        mY = renderer.getScreenHeight() / 2 - mW / 2;
+        super.render(renderer);
+    }
 
-        }
+    @Override
+    public float getX() {
+        long dt = System.currentTimeMillis() - mStartedTime;
+        long hd = mDuration / 2;
+        float a = mW / (hd * hd * hd) * (dt - hd) * (dt - hd) * (dt - hd);
+        System.out.println(Float.valueOf(a));
+        return a;
+    }
+
+    @Override
+    public float getY() {
+        return mY;
+    }
+
+    @Override
+    public float getZ() {
+        return 0.6f;
+    }
+
+    @Override
+    public float getW() {
+        return mW;
+    }
+
+    @Override
+    public float getH() {
+        return mW;
     }
 
     public boolean done() {
@@ -28,5 +60,7 @@ public class Popup extends Renderable {
     }
 
     private long mStartedTime, mDuration;
+    private float mW;
+    private float mX, mY;
 
 }

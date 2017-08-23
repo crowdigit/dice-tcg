@@ -73,6 +73,13 @@ public class GameUI extends Renderable implements UI {
 
                 // while (mUser.getHP() > 0 && mEnemy.getHP() > 0) { TODO
                 while (true) {
+                    String texName;
+                    if (attack) texName = "attack";
+                    else texName = "defend";
+                    mPopup = new Popup(2000, mController.getRenderer().getTexture(texName));
+                    while (!mPopup.done()) { }
+                    mPopup = null;
+
                     if (attack) {
                         System.out.println("player attacks");
                         mUser.enableControl();
@@ -84,11 +91,7 @@ public class GameUI extends Renderable implements UI {
                         mUser.enableControl();
                         mUser.takeTurn(mField.getUserFieldController(), attack);
                     }
-                    mPopup = new Popup(1000, 1);
-                    while (!mPopup.done()) {
-                    }
                     System.out.println("poped up");
-                    mPopup = null;
                     mField.combat(attack);
                     attack = !attack;
                     System.out.println("P: " + mUser.getHP() + ", E: " + mEnemy.getHP());

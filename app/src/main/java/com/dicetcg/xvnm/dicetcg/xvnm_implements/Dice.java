@@ -44,12 +44,12 @@ public class Dice extends Renderable {
 
     @Override
     public float getW() {
-        return 150;
+        return mW;
     }
 
     @Override
     public float getH() {
-        return 150;
+        return mW;
     }
 
     @Override
@@ -65,6 +65,7 @@ public class Dice extends Renderable {
     @Override
     public void render(GLRenderer renderer) {
         mY = renderer.getScreenHeight() / 2;
+        mW = renderer.getScreenWidth() / 5;
         super.render(renderer);
     }
 
@@ -82,5 +83,6 @@ public class Dice extends Renderable {
     private float mScreenWidth;
     private float mY;
     private float mR;
+    private float mW;
 
 }

@@ -82,6 +82,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         for (String textureName : mTextureNames)
             mTextures.put(textureName, loadTexture(textureName));
         mTextures.put("behind", loadTexture("behind"));
+        mTextures.put("attack", loadTexture("atkpha"));
+        mTextures.put("defend", loadTexture("defpha"));
+        mTextures.put("battle", loadTexture("batpha"));
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glEnable(GLES20.GL_BLEND);
