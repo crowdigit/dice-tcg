@@ -38,7 +38,7 @@ public class Field extends Renderable {
         mController = controller;
 
         mUserController = new Control(mUserCard);
-        mEnemyController = new Control(mEnemyCard);
+        mEnemyController = new Control(mEnemyCard, true);
 
         mDice = new Dice();
         mDice.renderTexture(false);
@@ -46,19 +46,22 @@ public class Field extends Renderable {
 
     @Override
     public void render(GLRenderer renderer) {
+        mEnemyController.render(renderer);
+        mUserController.render(renderer);
         for (int i = 0; i < 3; i++) {
             if (mUserCard.get(i) != null)
                 mUserCard.get(i).render(renderer);
             if (mEnemyCard.get(i) != null)
                 mEnemyCard.get(i).render(renderer);
         }
-        mDice.render(renderer);
         super.render(renderer);
+        mDice.render(renderer);
     }
 
     protected class Control {
 
         public Control(ArrayList<Card> slots) {
+            mEnemy = false;
             mSlots = slots;
             mSlotHitboxes = new ArrayList<>();
             mSlotHitboxes.add(
@@ -82,6 +85,11 @@ public class Field extends Renderable {
                         @Override
                         public float getH() {
                             return Field.this.getH()/2;
+                        }
+
+                        @Override
+                        public float getZ() {
+                            return 0.2f;
                         }
                     }
             );
@@ -107,6 +115,11 @@ public class Field extends Renderable {
                         public float getH() {
                             return Field.this.getH()/2;
                         }
+
+                        @Override
+                        public float getZ() {
+                            return 0.2f;
+                        }
                     }
             );
             mSlotHitboxes.add(
@@ -131,8 +144,125 @@ public class Field extends Renderable {
                         public float getH() {
                             return Field.this.getH()/2;
                         }
+
+                        @Override
+                        public float getZ() {
+                            return 0.2f;
+                        }
                     }
             );
+            for (Touchable a : mSlotHitboxes)
+                a.renderTexture(true);
+        }
+
+        public Control(ArrayList<Card> slots, boolean a) {
+            mEnemy = true;
+            mSlots = slots;
+            mSlotHitboxes = new ArrayList<>();
+            mSlotHitboxes.add(
+                    new Touchable() {
+
+                        @Override
+                        public float getX() {
+                            return Field.this.getX();
+                        }
+
+                        @Override
+                        public float getY() {
+                            return Field.this.getY() + this.getH();
+                        }
+
+                        @Override
+                        public float getW() {
+                            return Field.this.getW()/3;
+                        }
+
+                        @Override
+                        public float getH() {
+                            return Field.this.getH()/2;
+                        }
+
+                        @Override
+                        public float getZ() {
+                            return 0.2f;
+                        }
+
+                        @Override
+                        public float getRotate() {
+                            return 180;
+                        }
+                    }
+            );
+            mSlotHitboxes.add(
+                    new Touchable() {
+
+                        @Override
+                        public float getX() {
+                            return Field.this.getX() + Field.this.getW()/3;
+                        }
+
+                        @Override
+                        public float getY() {
+                            return Field.this.getY() + this.getH();
+                        }
+
+                        @Override
+                        public float getW() {
+                            return Field.this.getW()/3;
+                        }
+
+                        @Override
+                        public float getH() {
+                            return Field.this.getH()/2;
+                        }
+
+                        @Override
+                        public float getZ() {
+                            return 0.2f;
+                        }
+
+                        @Override
+                        public float getRotate() {
+                            return 180;
+                        }
+                    }
+            );
+            mSlotHitboxes.add(
+                    new Touchable() {
+
+                        @Override
+                        public float getX() {
+                            return Field.this.getX() + Field.this.getW()/3 * 2;
+                        }
+
+                        @Override
+                        public float getY() {
+                            return Field.this.getY() + this.getH();
+                        }
+
+                        @Override
+                        public float getW() {
+                            return Field.this.getW()/3;
+                        }
+
+                        @Override
+                        public float getH() {
+                            return Field.this.getH()/2;
+                        }
+
+                        @Override
+                        public float getZ() {
+                            return 0.2f;
+                        }
+
+                        @Override
+                        public float getRotate() {
+                            return 180;
+                        }
+                    }
+            );
+            for (Touchable card : mSlotHitboxes)
+                card.renderTexture(true);
         }
 
         public boolean slotAvailable(int index) {
@@ -178,8 +308,19 @@ public class Field extends Renderable {
             return Field.this.getH();
         }
 
+        public void render(GLRenderer renderer) {
+            int tex = renderer.getTexture("empty");
+            for (int i = 0; i < 3; i++) {
+                if (mEnemy)
+                    mSlotHitboxes.get(i);
+                mSlotHitboxes.get(i).setTexture(tex);
+                mSlotHitboxes.get(i).render(renderer);
+            }
+        }
+
         private ArrayList<Card> mSlots;
         private ArrayList<Touchable> mSlotHitboxes;
+        private boolean mEnemy;
 
     }
 

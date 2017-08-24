@@ -2,6 +2,8 @@ package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
 import android.view.MotionEvent;
 
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
+
 import java.util.Random;
 
 /**
@@ -77,6 +79,12 @@ public class EndButton extends Touchable {
                     }
             }
         }
+    }
+
+    @Override
+    public void render(GLRenderer renderer) {
+        setTexture(renderer.getTexture("next"));
+        super.render(renderer);
     }
 
     public boolean isButtonPressed() {
