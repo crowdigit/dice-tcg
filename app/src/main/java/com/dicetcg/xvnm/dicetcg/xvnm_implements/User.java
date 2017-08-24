@@ -14,12 +14,15 @@ public class User extends Player {
         super(controller);
         mIsMovingCard = false;
         mEndTurnButton = new EndButton(controller);
+        mEndTurnButton.renderTexture(true);
         draw();
+        mCost = new Cost();
     }
 
     @Override
     public void takeTurn(Field.Control field, boolean attack) {
         super.takeTurn(field, attack);
+        mCost.setNumber(getMana(), mController);
         System.out.println("M: " + getManaMax() + ", m: " + getMana()); // TODO render mana
         while (isControlEnabled()) {
             // wait for user to end their turn
@@ -28,6 +31,7 @@ public class User extends Player {
 
     @Override
     public void render(GLRenderer renderer) {
+        mCost.render(renderer);
         int index = 0;
         HandCard selected = null;
         int idx = -1;
@@ -59,6 +63,7 @@ public class User extends Player {
                     subMana(mHand.get(i).getMetaCard().getSummonCost());
                     mHand.remove(i);
                     mIsMovingCard = false;
+                    mCost.setNumber(getMana(), mController);
                 }
                 else if (f == 3)
                     mIsMovingCard = false;
@@ -88,5 +93,6 @@ public class User extends Player {
     private boolean mControlEnabled;
     private boolean mIsMovingCard;
     private EndButton mEndTurnButton;
+    private Cost mCost;
 
 }

@@ -113,7 +113,8 @@ public class MainUI extends Renderable implements UI {
     public void init(GLRenderer renderer) {
         mW = renderer.getScreenWidth();
         mH = renderer.getScreenHeight();
-        renderTexture(false);
+        renderTexture(true);
+        setTexture(renderer.getTexture("title"));
 
         button.init(renderer);
     }

@@ -119,9 +119,8 @@ public class HandCard extends Touchable {
                         controller.getFieldController().playCard(slot, mMetaCard, true);
                         return 2;
                     }
-                    return 3;
                 }
-                break;
+                return 3;
             default:
         }
 

@@ -2,7 +2,9 @@ package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
 import android.view.MotionEvent;
 import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
+import com.dicetcg.xvnm.dicetcg.render.Renderable;
 
+import java.util.Collections;
 import java.util.LinkedList;
 
 /**
@@ -15,7 +17,7 @@ abstract public class Player {
         mDeck = new Deck(controller.getMetaCards());
         mHand = new LinkedList<>();
         mController = controller;
-        mHP = 500;
+        mHP = 5200;
     }
 
     public int getHP() {

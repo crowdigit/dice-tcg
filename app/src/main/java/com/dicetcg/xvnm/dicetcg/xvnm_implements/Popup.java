@@ -28,9 +28,7 @@ public class Popup extends Renderable {
     public float getX() {
         long dt = System.currentTimeMillis() - mStartedTime;
         long hd = mDuration / 2;
-        float a = mW / (hd * hd * hd) * (dt - hd) * (dt - hd) * (dt - hd);
-        System.out.println(Float.valueOf(a));
-        return a;
+        return mW / (hd * hd * hd) * (dt - hd) * (dt - hd) * (dt - hd);
     }
 
     @Override
