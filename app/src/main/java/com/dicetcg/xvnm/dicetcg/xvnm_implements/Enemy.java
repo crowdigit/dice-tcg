@@ -34,7 +34,6 @@ public class Enemy extends Player {
 
         for (HandCard card : mHand) {
             synchronized (card) {
-                card.setRotate(180);
                 card.setY(renderer.getScreenHeight() - card.getH());
                 card.setTexture(behindTex);
                 card.render(mHand.size(), index++, renderer);

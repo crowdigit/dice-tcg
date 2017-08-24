@@ -74,31 +74,31 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         SQLiteDatabase db = myCardDB.getWritableDatabase();;
 
         name = "amute"; HP = 2100; AC = 0; SC = 6; MC = 2; DiceTop = 2000; DiceBottom = 1700; DiceMax = 5;
-        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        insert_data = "insert into myCardDB values('" + name + "'," + SC + "," + AC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
         name = "bigfoot"; HP = 2000; AC = 0; SC = 4; MC = 4; DiceTop = 2300; DiceBottom = 1400; DiceMax = 3;
-        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        insert_data = "insert into myCardDB values('" + name + "'," + SC + "," + AC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
         name = "bloodknight"; HP = 2300; AC = 400; SC = 6; MC = 4; DiceTop = 2000; DiceBottom = 1500; DiceMax = 3;
-        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        insert_data = "insert into myCardDB values('" + name + "'," + SC + "," + AC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
         name = "bongun"; HP = 2100; AC = 100; SC = 4; MC = 4; DiceTop = 2100; DiceBottom = 1000; DiceMax = 2;
-        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        insert_data = "insert into myCardDB values('" + name + "'," + SC + "," + AC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
         name = "chung"; HP = 2400; AC = 200; SC = 6; MC = 4; DiceTop = 2300; DiceBottom = 1900; DiceMax = 4;
-        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        insert_data = "insert into myCardDB values('" + name + "'," + SC + "," + AC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
         name = "cinoby"; HP = 1900; AC = 200; SC = 5; MC = 2; DiceTop = 1600; DiceBottom = 1200; DiceMax = 4;
-        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        insert_data = "insert into myCardDB values('" + name + "'," + SC + "," + AC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
         name = "clock"; HP = 1900; AC = 500; SC = 6; MC = 4; DiceTop = 2100; DiceBottom = 1700; DiceMax = 3;
-        insert_data = "insert into myCardDB values('" + name + "'," + AC + "," + SC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
+        insert_data = "insert into myCardDB values('" + name + "'," + SC + "," + AC + "," + MC + "," + HP + "," + DiceTop + "," + DiceBottom + "," + DiceMax + ");";
         db.execSQL(insert_data);
 
         name = "darkframe"; HP = 2400; AC = 200; SC = 5; MC = 3; DiceTop = 1800; DiceBottom = 1400; DiceMax = 4;
