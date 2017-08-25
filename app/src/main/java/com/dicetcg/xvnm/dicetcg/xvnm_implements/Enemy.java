@@ -16,6 +16,11 @@ public class Enemy extends Player {
     }
 
     @Override
+    public void updateHealth() {
+
+    }
+
+    @Override
     public void takeTurn(Field.Control field, boolean attack) {
         // TODO implement enemy AI
         if (mHand.size() > 0)

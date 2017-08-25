@@ -66,8 +66,6 @@ public class MainUI extends Renderable implements UI {
 
     @Override
     public void stop() {
-        button = null;
-        mFader = null;
     }
 
     @Override
@@ -124,6 +122,8 @@ public class MainUI extends Renderable implements UI {
         if (mFader != null && !mFader.isActive()) {
             mActivity.setCurrentUI(1);
             return;
+        } else if (mFader == null) {
+            renderer.setFade(1.0f);
         }
 
         super.render(renderer);

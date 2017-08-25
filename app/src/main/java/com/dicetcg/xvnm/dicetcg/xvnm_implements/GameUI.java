@@ -71,8 +71,10 @@ public class GameUI extends Renderable implements UI {
             public void run() {
                 boolean attack = true; // TODO random
 
-                // while (mUser.getHP() > 0 && mEnemy.getHP() > 0) { TODO
-                while (true) {
+                mUser.updateHealth();
+                mEnemy.updateHealth();
+
+                while (mUser.getHP() > 0 && mEnemy.getHP() > 0) {
                     String texName;
                     if (attack) texName = "attack";
                     else texName = "defend";
@@ -100,6 +102,15 @@ public class GameUI extends Renderable implements UI {
                     System.out.println("P: " + mUser.getHP() + ", E: " + mEnemy.getHP());
                     System.out.println("turn");
                 }
+                if (mUser.getHP() < 0)
+                    mPopup = new Popup(1600, mController.getRenderer().getTexture("lose"));
+                else
+                    mPopup = new Popup(1600, mController.getRenderer().getTexture("win"));
+                while (!mPopup.done()) { }
+                mFader = new Fader();
+                mFader.start(1000, true);
+                while (mFader != null) { }
+                mActivity.setCurrentUI(0);
             }
         });
         game.start();
@@ -108,9 +119,6 @@ public class GameUI extends Renderable implements UI {
 
     @Override
     public void stop() {
-        mFader = null;
-        mUser = null;
-        mEnemy = null;
     }
 
     @Override
@@ -174,6 +182,14 @@ public class GameUI extends Renderable implements UI {
                 mEnemy.setHP(mEnemy.getHP() - damage);
             else
                 mUser.setHP(mUser.getHP() - damage);
+        }
+
+        public void updateUserHealth() {
+            mUser.updateHealth();
+        }
+
+        public void updateEnemyHealth() {
+            mEnemy.updateHealth();
         }
 
         abstract Field.Control getFieldController();
