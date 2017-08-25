@@ -61,8 +61,11 @@ public class MainUI extends Renderable implements UI {
             private float mW, mH;
 
         };
+        button.renderTexture(true);
         mFader = null;
     }
+
+    private int mStartTex = -1;
 
     @Override
     public void stop() {
@@ -127,6 +130,8 @@ public class MainUI extends Renderable implements UI {
         }
 
         super.render(renderer);
+        mStartTex = renderer.getTexture("start");
+        button.setTexture(mStartTex);
         button.render(renderer);
         if (mFader != null)
             mFader.render(renderer);

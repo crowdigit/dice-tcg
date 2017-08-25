@@ -149,7 +149,17 @@ public class GameUI extends Renderable implements UI {
 
     @Override
     public float getR() {
-        return 1.0f;
+        return 0.5f;
+    }
+
+    @Override
+    public float getG() {
+        return 0.3f;
+    }
+
+    @Override
+    public float getB() {
+        return 0.3f;
     }
 
     @Override

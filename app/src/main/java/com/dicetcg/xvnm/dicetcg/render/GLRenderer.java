@@ -91,6 +91,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         mTextures.put("title", loadTexture("title"));
         mTextures.put("win", loadTexture("win"));
         mTextures.put("lose", loadTexture("lose"));
+        mTextures.put("start", loadTexture("start"));
 
         String n = "n";
         for (int i = 0; i < 10; i++)
