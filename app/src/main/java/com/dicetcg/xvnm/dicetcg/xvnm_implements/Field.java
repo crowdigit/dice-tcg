@@ -351,6 +351,10 @@ public class Field extends Renderable {
                     while (attacker.isAttacking()) {
                     }
                     mController.deal(attack, damage);
+                    if (!attack)
+                        mController.updateUserHealth();
+                    else
+                        mController.updateEnemyHealth();
                 } else {
                     attacker.attack(false, attack, 0);
                     while (attacker.isAttacking()) {

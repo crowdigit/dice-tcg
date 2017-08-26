@@ -17,6 +17,7 @@ public class User extends Player {
         mEndTurnButton.renderTexture(true);
         draw();
         mCost = new Cost();
+        mHealth = new Health();
     }
 
     @Override
@@ -30,8 +31,14 @@ public class User extends Player {
     }
 
     @Override
+    public void updateHealth() {
+        mHealth.setNumber(getHP(), mController);
+    }
+
+    @Override
     public void render(GLRenderer renderer) {
         mCost.render(renderer);
+        mHealth.render(renderer);
         int index = 0;
         HandCard selected = null;
         int idx = -1;
@@ -93,6 +100,6 @@ public class User extends Player {
     private boolean mControlEnabled;
     private boolean mIsMovingCard;
     private EndButton mEndTurnButton;
-    private Cost mCost;
+    private Cost mCost, mHealth;
 
 }

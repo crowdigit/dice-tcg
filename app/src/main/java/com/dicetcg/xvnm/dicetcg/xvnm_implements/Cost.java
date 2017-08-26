@@ -12,19 +12,23 @@ import java.util.LinkedList;
 
 public class Cost {
 
-    private class Number extends Renderable {
+    public class Number extends Renderable {
 
-        public Number(GameUI.GameUIController controller, int num, int totaldigit, int digit) {
+        public Number(GameUI.GameUIController controller, int num) {
             mNumber = num;
-            mDigit = digit;
             renderTexture(true);
-            mSide = controller.getFieldController().getY() - ((float)controller.getRenderer().getScreenWidth())/200*51;
-            // mX = (float)controller.getRenderer().getScreenWidth() / 2 - (float)totaldigit / 2 * getW() + getW() * digit;
-            mX = controller.getRenderer().getScreenWidth() - getW() * 3 - (float)totaldigit / 2 * getW() + getW() * digit;
-            float offset = getH() / 10;
-            mY = controller.getFieldController().getY() - getH();
-            mSide -= offset * 2;
-            mY += offset;
+        }
+
+        public void setX(float x) {
+            mX = x;
+        }
+
+        public void setY(float y) {
+            mY = y;
+        }
+
+        public void setSide(float side) {
+            mSide = side;
         }
 
         @Override
@@ -60,7 +64,7 @@ public class Cost {
 
         private float mX, mY;
         private float mSide;
-        private int mNumber, mDigit;
+        private int mNumber;
 
     }
 
@@ -69,27 +73,46 @@ public class Cost {
     }
 
     public void setNumber(int num, GameUI.GameUIController controller) {
-        LinkedList<Integer> digits = new LinkedList<>();
-        if (num == 0) {
-            digits.add(0);
-        }
-        else
-            while (num != 0) {
-                digits.add(num % 10);
-                num /= 10;
+        synchronized (mDigits) {
+            if (num < 0)
+                num = 0;
+            LinkedList<Integer> digits = new LinkedList<>();
+            if (num == 0) {
+                digits.add(0);
+            } else
+                while (num != 0) {
+                    digits.add(num % 10);
+                    num /= 10;
+                }
+            Collections.reverse(digits);
+
+            mDigits.clear();
+
+            int cnt = 0;
+            for (int n : digits) {
+                Cost.Number c = new Cost.Number(controller, n);
+                float side = controller.getFieldController().getY() - ((float) controller.getRenderer().getScreenWidth()) / 200 * 51;
+                float offset = side / 10;
+                float y = controller.getFieldController().getY() - side;
+                side -= offset * 2;
+                y += offset;
+                c.setSide(side);
+                c.setY(y);
+                c.setX(controller.getRenderer().getScreenWidth() - c.getW() * 3 - (float) digits.size() / 2 * c.getW() + c.getW() * cnt++);
+                mDigits.add(c);
             }
-        Collections.reverse(digits);
-
-        mDigits.clear();
-
-        int cnt = 0;
-        for (int n : digits)
-            mDigits.add(new Cost.Number(controller, n, digits.size(), cnt++));
+        }
     }
 
     public void render(GLRenderer renderer) {
-        for (Renderable r : mDigits)
-            r.render(renderer);
+        synchronized (this) {
+            for (Renderable r : mDigits)
+                r.render(renderer);
+        }
+    }
+
+    protected LinkedList<Renderable> getDigits() {
+        return mDigits;
     }
 
     private LinkedList<Renderable> mDigits;

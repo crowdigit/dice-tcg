@@ -38,6 +38,8 @@ abstract public class Player {
         }
     }
 
+    abstract public void updateHealth();
+
     public int getMana() {
         return mMana;
     }

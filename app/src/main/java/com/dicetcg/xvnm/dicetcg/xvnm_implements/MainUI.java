@@ -61,13 +61,14 @@ public class MainUI extends Renderable implements UI {
             private float mW, mH;
 
         };
+        button.renderTexture(true);
         mFader = null;
     }
 
+    private int mStartTex = -1;
+
     @Override
     public void stop() {
-        button = null;
-        mFader = null;
     }
 
     @Override
@@ -124,9 +125,13 @@ public class MainUI extends Renderable implements UI {
         if (mFader != null && !mFader.isActive()) {
             mActivity.setCurrentUI(1);
             return;
+        } else if (mFader == null) {
+            renderer.setFade(1.0f);
         }
 
         super.render(renderer);
+        mStartTex = renderer.getTexture("start");
+        button.setTexture(mStartTex);
         button.render(renderer);
         if (mFader != null)
             mFader.render(renderer);

@@ -13,6 +13,12 @@ public class Enemy extends Player {
 
     public Enemy(GameUI.GameUIController controller) {
         super(controller);
+        mHealth = new EnemyHealth();
+    }
+
+    @Override
+    public void updateHealth() {
+        mHealth.setNumber(getHP(), mController);
     }
 
     @Override
@@ -29,6 +35,8 @@ public class Enemy extends Player {
 
     @Override
     public void render(GLRenderer renderer) {
+        mHealth.render(renderer);
+
         int index = 0;
         int behindTex = renderer.getTexture("behind");
 
@@ -46,4 +54,6 @@ public class Enemy extends Player {
     public boolean onTouch(MotionEvent event) {
         return false;
     }
+
+    private EnemyHealth mHealth;
 }
