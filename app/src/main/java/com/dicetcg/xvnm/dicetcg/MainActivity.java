@@ -2,8 +2,10 @@ package com.dicetcg.xvnm.dicetcg;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -13,7 +15,6 @@ import com.dicetcg.xvnm.dicetcg.xvnm_implements.GameUI;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.MainUI;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.MetaCard;
 import com.dicetcg.xvnm.dicetcg.xvnm_implements.UI;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
@@ -24,12 +25,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private CardDBHandler urCardDB;
     private ArrayList<MetaCard> mMetaCards;
 
+    public MediaPlayer intro;
+    public MediaPlayer lobby;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGLView = new GLView(this);
         mGLView.setOnTouchListener(this);
         setContentView(mGLView);
+
+        intro = MediaPlayer.create(this, R.raw.intro);
+        lobby = MediaPlayer.create(this, R.raw.lobby);
 
         // setContentView(R.layout.debug); // -- uncommet here to debug
 
@@ -46,6 +53,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         if (android.os.Build.VERSION.SDK_INT >= 11)
             mGLView.setPreserveEGLContextOnPause(true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (intro.isPlaying()) intro.stop();
+        else if (lobby.isPlaying()) lobby.stop();
+        super.onDestroy();
     }
 
     public void DBNull(){
@@ -195,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         db.close();
 
-        Toast.makeText(this, "데이터 저장 완료", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "데이터가 저장되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
     public void ReadCard(){

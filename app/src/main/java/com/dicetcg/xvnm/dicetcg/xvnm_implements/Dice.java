@@ -68,7 +68,17 @@ public class Dice extends Renderable {
 
     @Override
     public float getR() {
-        return 0.49f;
+        return 0.09f;
+    }
+
+    @Override
+    public float getG() {
+        return 0.21f;
+    }
+
+    @Override
+    public float getB() {
+        return 0.86f;
     }
 
     public void roll(float sw) {

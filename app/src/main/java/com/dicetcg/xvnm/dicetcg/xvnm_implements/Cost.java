@@ -59,7 +59,7 @@ public class Cost {
 
         @Override
         public float getH() {
-            return mSide;
+            return (float) (mSide * 0.5);
         }
 
         private float mX, mY;
@@ -91,14 +91,14 @@ public class Cost {
             int cnt = 0;
             for (int n : digits) {
                 Cost.Number c = new Cost.Number(controller, n);
-                float side = controller.getFieldController().getY() - ((float) controller.getRenderer().getScreenWidth()) / 200 * 51;
+                float side = (float) ((controller.getFieldController().getY() - ((float) controller.getRenderer().getScreenWidth()) / 200 * 51)*0.75);
                 float offset = side / 10;
                 float y = controller.getFieldController().getY() - side;
                 side -= offset * 2;
                 y += offset;
                 c.setSide(side);
-                c.setY(y);
-                c.setX(controller.getRenderer().getScreenWidth() - c.getW() * 3 - (float) digits.size() / 2 * c.getW() + c.getW() * cnt++);
+                c.setY((float) (y * 1.1));
+                c.setX((float) ((controller.getRenderer().getScreenWidth() - c.getW() * 3 - (float) digits.size() / 2 * c.getW() + c.getW() * cnt++)*1.1));
                 mDigits.add(c);
             }
         }

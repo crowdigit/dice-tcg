@@ -10,7 +10,7 @@ import com.dicetcg.xvnm.dicetcg.render.Renderable;
 public class Fader extends Renderable {
 
     public Fader() {
-        renderTexture(false);
+        renderTexture(true);
         mIsActive = false;
     }
 

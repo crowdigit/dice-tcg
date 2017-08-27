@@ -18,10 +18,10 @@ public class EndButton extends Touchable {
         mG = random.nextFloat();
         mB = random.nextFloat();
 
-        mW = controller.getRenderer().getScreenWidth() / 5;
-        mH = controller.getFieldController().getY() - ((float)controller.getRenderer().getScreenWidth())/200*51;
+        mW = controller.getRenderer().getScreenWidth() / 4;
+        mH = (float)((controller.getFieldController().getY() - ((float)controller.getRenderer().getScreenWidth())/200*51)*0.75);
         float offset = this.mH / 10;
-        mY = controller.getFieldController().getY() - this.mH;
+        mY = (controller.getFieldController().getY() - this.mH);
         mH -= offset * 2;
         mY += offset;
     }

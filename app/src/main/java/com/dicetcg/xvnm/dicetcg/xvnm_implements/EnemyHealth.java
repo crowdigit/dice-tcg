@@ -1,5 +1,7 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
+import com.dicetcg.xvnm.dicetcg.render.GLRenderer;
+
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -8,10 +10,17 @@ import java.util.LinkedList;
  */
 
 public class EnemyHealth extends Cost {
+
+    private Touchable result;
+    public Health h;
+    public int EnemyHp;
+
     @Override
     public void setNumber(int num, GameUI.GameUIController controller) {
+
         if (num < 0)
             num = 0;
+
         LinkedList<Integer> digits = new LinkedList<>();
         if (num == 0) {
             digits.add(0);
@@ -30,7 +39,7 @@ public class EnemyHealth extends Cost {
         int cnt = 0;
         for (int n : digits) {
             Cost.Number c = new Cost.Number(controller, n);
-            float side = controller.getFieldController().getY() - ((float)controller.getRenderer().getScreenWidth())/200*51;
+            float side = (float)((controller.getFieldController().getY() - ((float)controller.getRenderer().getScreenWidth())/200*51)*0.75);
             float offset = side / 10;
 
             float cardHeight = ((float)controller.getRenderer().getScreenWidth()/100*17) / 2 * 3;
@@ -39,11 +48,14 @@ public class EnemyHealth extends Cost {
             side -= offset * 2;
             y += offset;
             c.setSide(side);
-            c.setY(y);
+            c.setY((float) (y * 1.05));
             c.setX(controller.getRenderer().getScreenWidth() / 2 - (float)digits.size() / 2 * c.getW() + c.getW() * cnt++);
             synchronized (super.getDigits()) {
                 getDigits().add(c);
             }
         }
+    }
+    public int getEnemyHp(){
+        return EnemyHp;
     }
 }

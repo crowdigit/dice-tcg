@@ -22,7 +22,7 @@ public class GameUI extends Renderable implements UI {
     public void start() {
         mActivity.getRenderer().clearRenderables();
         mActivity.getRenderer().registerRenderable(this);
-        renderTexture(false);
+        renderTexture(true);
 
         mFader = new Fader();
         mFader.start(500, false);
@@ -113,8 +113,9 @@ public class GameUI extends Renderable implements UI {
                 mActivity.setCurrentUI(0);
             }
         });
+            if (mActivity.intro.isPlaying()) mActivity.intro.stop();
+            if (mActivity.lobby.isPlaying()) mActivity.lobby.stop();
         game.start();
-
     }
 
     @Override
@@ -125,6 +126,13 @@ public class GameUI extends Renderable implements UI {
     public void init(GLRenderer renderer) {
         mW = renderer.getScreenWidth();
         mH = renderer.getScreenHeight();
+        renderTexture(true);
+        setTexture(renderer.getTexture("start"));
+
+        mActivity.lobby.setLooping(true);
+        mActivity.lobby.setVolume(100,100);
+        mActivity.lobby.start();
+
     }
 
     @Override

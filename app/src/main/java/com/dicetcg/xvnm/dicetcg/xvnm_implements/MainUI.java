@@ -1,5 +1,6 @@
 package com.dicetcg.xvnm.dicetcg.xvnm_implements;
 
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
 import com.dicetcg.xvnm.dicetcg.MainActivity;
@@ -49,12 +50,12 @@ public class MainUI extends Renderable implements UI {
 
             @Override
             public void init(GLRenderer renderer) {
-                float scale = renderer.getScreenWidth() / 100;
-                mW = scale * 50;
-                mH = mW / 3;
+                float scale = renderer.getScreenWidth();
+                mW = scale;
+                mH = renderer.getScreenHeight();
 
-                mX = renderer.getScreenWidth()/2 - mW/2;
-                mY = renderer.getScreenHeight()/2 - mH/2;
+                mX = 0;
+                mY = 0;
             }
 
             private float mX, mY;
@@ -75,6 +76,8 @@ public class MainUI extends Renderable implements UI {
     public boolean onTouch(MotionEvent event) {
         if (mFader == null && button.checkTouch(event.getX(), mH - event.getY())) {
             mFader = new Fader();
+            if (mActivity.intro.isPlaying()) mActivity.intro.stop();
+            if (mActivity.lobby.isPlaying()) mActivity.lobby.stop();
             mFader.start(500, true);
         }
         return false;
@@ -117,7 +120,12 @@ public class MainUI extends Renderable implements UI {
         renderTexture(true);
         setTexture(renderer.getTexture("title"));
 
+        mActivity.intro.setLooping(true);
+        mActivity.intro.setVolume(100,100);
+        mActivity.intro.start();
+
         button.init(renderer);
+
     }
 
     @Override
@@ -128,9 +136,8 @@ public class MainUI extends Renderable implements UI {
         } else if (mFader == null) {
             renderer.setFade(1.0f);
         }
-
         super.render(renderer);
-        mStartTex = renderer.getTexture("start");
+        mStartTex = renderer.getTexture("title");
         button.setTexture(mStartTex);
         button.render(renderer);
         if (mFader != null)
